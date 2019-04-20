@@ -123,6 +123,13 @@ public class HBaseUtil {
         return null;
     }
 
+    /**
+     * 获取一行数据
+     * @param tableName
+     * @param rowKey
+     * @param filterList
+     * @return
+     */
     public static Result getRow(String tableName, String rowKey, FilterList filterList) {
         try (Table table = HBaseConn.getTable(tableName)) {
             Get get = new Get(Bytes.toBytes(rowKey));
@@ -198,6 +205,12 @@ public class HBaseUtil {
         return true;
     }
 
+    /**
+     * 删除列族
+     * @param tableName
+     * @param cfName
+     * @return
+     */
     public static boolean deleteColumnFamily(String tableName, String cfName) {
         try (HBaseAdmin admin = (HBaseAdmin) HBaseConn.getHBaseConn().getAdmin()) {
             admin.deleteColumn(tableName, cfName);
@@ -207,6 +220,14 @@ public class HBaseUtil {
         return true;
     }
 
+    /**
+     * 条件删除
+     * @param tableName
+     * @param rowKey
+     * @param cfName
+     * @param qualifier
+     * @return
+     */
     public static boolean deleteQualifier(String tableName, String rowKey, String cfName,
                                           String qualifier) {
         try (Table table = HBaseConn.getTable(tableName)) {
