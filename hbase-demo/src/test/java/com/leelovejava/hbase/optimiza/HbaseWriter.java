@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * hbase优化之写操作
+ * @see 'https://www.cnblogs.com/panfeng412/archive/2012/03/08/hbase-performance-tuning-section2.html'
  */
 public class HbaseWriter {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
