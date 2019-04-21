@@ -1,9 +1,10 @@
-package com.leelovejava.hbase;
+package com.leelovejava.hbase.optimiza;
 
+import com.leelovejava.hbase.HBaseConn;
+import com.leelovejava.hbase.HBaseUtil;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.client.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +19,8 @@ import java.math.BigInteger;
  */
 public class HbaseOptimiza {
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+    private final static String tableName = "FileTable";
 
     private Connection connection;
 
@@ -43,6 +46,22 @@ public class HbaseOptimiza {
         byte[][] splits = getHexSplits("100", "200", 2);
         HTableDescriptor descriptor = new HTableDescriptor(TableName.valueOf("test2"));
         admin.createTable(descriptor, splits);
+    }
+
+    @Test
+    public void setScannerCache(){
+        try {
+            //HTable hTable= new HTable();
+            Table table = HBaseConn.getTable(tableName);
+            //hTable.setScannerCaching();
+
+            // 3）通过调用Scan.setCaching(int caching)进行配置
+            Scan scan = new Scan();
+            scan.setCaching(1000);
+            table.getScanner(scan);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static byte[][] getHexSplits(String startKey, String endKey, int numRegions) {
