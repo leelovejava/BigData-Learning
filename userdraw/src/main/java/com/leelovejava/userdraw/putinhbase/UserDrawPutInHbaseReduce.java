@@ -24,14 +24,14 @@ public class UserDrawPutInHbaseReduce extends TableReducer<Text, Text, NullWrita
 				
 				//跳过写入Hlog，提高写入速度
 				put.setDurability(Durability.SKIP_WAL);
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("mdn"), Bytes.toBytes(splited[1]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("male"), Bytes.toBytes(splited[2]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("female"), Bytes.toBytes(splited[3]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("age1"), Bytes.toBytes(splited[4]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("age2"), Bytes.toBytes(splited[5]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("age3"), Bytes.toBytes(splited[6]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("age4"), Bytes.toBytes(splited[7]));
-				put.add(Bytes.toBytes("draw"), Bytes.toBytes("age5"), Bytes.toBytes(splited[8]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("mdn"), Bytes.toBytes(splited[1]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("male"), Bytes.toBytes(splited[2]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("female"), Bytes.toBytes(splited[3]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("age1"), Bytes.toBytes(splited[4]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("age2"), Bytes.toBytes(splited[5]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("age3"), Bytes.toBytes(splited[6]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("age4"), Bytes.toBytes(splited[7]));
+				put.addColumn(Bytes.toBytes("draw"), Bytes.toBytes("age5"), Bytes.toBytes(splited[8]));
 				context.write(NullWritable.get(), put);
 			}
 			
