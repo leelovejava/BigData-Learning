@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.leelovejava</groupId>
-    <artifactId>hbase-demo</artifactId>
+    <artifactId>hbase-learning</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>hbase-test</module>
+        <module>hbase-sample</module>
         <module>hbase-phoenix-mybatis</module>
         <module>hbase-es</module>
     </modules>

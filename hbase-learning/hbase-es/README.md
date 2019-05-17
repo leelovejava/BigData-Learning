@@ -27,3 +27,126 @@ hbase rowkey作为es的查询ID,然后将rowkey的字段拆分存在es，这样�
 
 ## 实例
 [Elasticsearch+Hbase实现海量数据秒回查询](https://blog.csdn.net/sdksdk0/article/details/53966430)
+
+[Elasticsearch对Hbase中的数据建索引实现海量数据快速查询](https://blog.csdn.net/m0_37739193/article/details/78029734)
+```
+ // 创建索引
+ @Test
+    public void createIndex() throws Exception {
+        List<Doc> arrayList = new ArrayList<Doc>();
+        File file = new File("C:\\Users\\asus\\Desktop\\doc1.txt");
+        List<String> list = FileUtils.readLines(file,"UTF8");
+        for(String line : list){
+            Doc Doc = new Doc();
+            String[] split = line.split("\t");
+            System.out.print(split[0]);
+            int parseInt = Integer.parseInt(split[0].trim());
+            Doc.setId(parseInt);
+            Doc.setTitle(split[1]);
+            Doc.setAuthor(split[2]);
+            Doc.setDescribe(split[3]);
+            Doc.setContent(split[3]);
+            arrayList.add(Doc);
+        }
+        HbaseUtils hbaseUtils = new HbaseUtils();
+        for (Doc Doc : arrayList) {
+            try {
+                //把数据插入hbase
+                hbaseUtils.put(hbaseUtils.TABLE_NAME, Doc.getId()+"", hbaseUtils.COLUMNFAMILY_1, hbaseUtils.COLUMNFAMILY_1_TITLE, Doc.getTitle());
+                hbaseUtils.put(hbaseUtils.TABLE_NAME, Doc.getId()+"", hbaseUtils.COLUMNFAMILY_1, hbaseUtils.COLUMNFAMILY_1_AUTHOR, Doc.getAuthor());
+                hbaseUtils.put(hbaseUtils.TABLE_NAME, Doc.getId()+"", hbaseUtils.COLUMNFAMILY_1, hbaseUtils.COLUMNFAMILY_1_DESCRIBE, Doc.getDescribe());
+                hbaseUtils.put(hbaseUtils.TABLE_NAME, Doc.getId()+"", hbaseUtils.COLUMNFAMILY_1, hbaseUtils.COLUMNFAMILY_1_CONTENT, Doc.getContent());
+                //把数据插入es
+                Esutil.addIndex("tfjt","doc", Doc);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+```
+
+```
+    // 查询
+	@RequestMapping("/search.do")
+	public String serachArticle(Model model,
+			@RequestParam(value="keyWords",required = false) String keyWords,
+			@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+			@RequestParam(value = "pageSize", defaultValue = "3") Integer pageSize){
+		try {
+			keyWords = new String(keyWords.getBytes("ISO-8859-1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		Map<String,Object> map = new HashMap<String, Object>();
+		int count = 0;
+		try {
+			map = Esutil.search(keyWords,"tfjt","doc",(pageNum-1)*pageSize, pageSize);
+			count = Integer.parseInt(((Long) map.get("count")).toString());
+		} catch (Exception e) {
+			logger.error("查询索引错误!{}",e);
+			e.printStackTrace();
+		}
+		PageUtil<Map<String, Object>> page = new PageUtil<Map<String, Object>>(String.valueOf(pageNum),String.valueOf(pageSize),count);
+		List<Map<String, Object>> articleList = (List<Map<String, Object>>)map.get("dataList");
+		page.setList(articleList);
+		model.addAttribute("total",count);
+		model.addAttribute("pageNum",pageNum);
+		model.addAttribute("page",page);
+		model.addAttribute("kw",keyWords);
+		return "index.jsp";
+	}
+	
+	// Esutil.search
+	public static Map<String, Object> search(String key,String index,String type,int start,int row){
+		SearchRequestBuilder builder = getClient().prepareSearch(index);
+		builder.setTypes(type);
+		builder.setFrom(start);
+		builder.setSize(row);
+		//设置高亮字段名称
+		builder.addHighlightedField("title");
+		builder.addHighlightedField("describe");
+		//设置高亮前缀
+		builder.setHighlighterPreTags("<font color='red' >");
+		//设置高亮后缀
+		builder.setHighlighterPostTags("</font>");
+		builder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
+		if(StringUtils.isNotBlank(key)){
+//			builder.setQuery(QueryBuilders.termQuery("title",key));
+			builder.setQuery(QueryBuilders.multiMatchQuery(key, "title","describe"));
+		}
+		builder.setExplain(true);
+		SearchResponse searchResponse = builder.get();
+		
+		SearchHits hits = searchResponse.getHits();
+		long total = hits.getTotalHits();
+		Map<String, Object> map = new HashMap<String,Object>();
+		SearchHit[] hits2 = hits.getHits();
+		map.put("count", total);
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		for (SearchHit searchHit : hits2) {
+			Map<String, HighlightField> highlightFields = searchHit.getHighlightFields();
+			HighlightField highlightField = highlightFields.get("title");
+			Map<String, Object> source = searchHit.getSource();
+			if(highlightField!=null){
+				Text[] fragments = highlightField.fragments();
+				String name = "";
+				for (Text text : fragments) {
+					name+=text;
+				}
+				source.put("title", name);
+			}
+			HighlightField highlightField2 = highlightFields.get("describe");
+			if(highlightField2!=null){
+				Text[] fragments = highlightField2.fragments();
+				String describe = "";
+				for (Text text : fragments) {
+					describe+=text;
+				}
+				source.put("describe", describe);
+			}
+			list.add(source);
+		}
+		map.put("dataList", list);
+		return map;
+   }
+```
