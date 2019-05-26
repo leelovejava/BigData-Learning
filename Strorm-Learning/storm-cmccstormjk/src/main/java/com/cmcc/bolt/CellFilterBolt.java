@@ -1,7 +1,6 @@
 package com.cmcc.bolt;
 
-import java.util.Map;
-
+import com.cmcc.tools.DateFmt;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.IBasicBolt;
@@ -9,7 +8,8 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import tools.DateFmt;
+
+import java.util.Map;
 
 public class CellFilterBolt implements IBasicBolt {
 
@@ -47,12 +47,10 @@ public class CellFilterBolt implements IBasicBolt {
 
 	@Override
 	public void cleanup() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void prepare(Map map, TopologyContext arg1) {
-		// TODO Auto-generated method stub
 	}
 
 }

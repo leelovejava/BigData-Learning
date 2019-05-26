@@ -16,7 +16,7 @@
  */
 package com.cmcc.kafka.productor;
 
-import com.cmcc.hbase.constant.Constants;
+import com.cmcc.Constants;
 
 public interface KafkaProperties {
 	final static String zkConnect = Constants.KAFKA_ZOOKEEPER_LIST;

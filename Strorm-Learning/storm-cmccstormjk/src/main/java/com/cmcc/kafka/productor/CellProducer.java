@@ -16,13 +16,13 @@
  */
 package com.cmcc.kafka.productor;
 
-import java.util.Properties;
-import java.util.Random;
-
-import org.apache.storm.utils.Utils;
+import com.cmcc.tools.DateFmt;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import tools.DateFmt;
+import org.apache.storm.utils.Utils;
+
+import java.util.Properties;
+import java.util.Random;
 
 /***
  * 模拟发送数据到kafka中

@@ -360,7 +360,6 @@ public class WeiBo {
                 try {
                     connection.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

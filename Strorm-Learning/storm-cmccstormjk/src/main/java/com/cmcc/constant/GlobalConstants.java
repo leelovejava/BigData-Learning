@@ -1,16 +1,18 @@
-package com.cmcc.hbase.constant;
+package com.cmcc.constant;
 
 /**
  * 定义
  * @author tianhao
  */
-public class Constants {
-	public static final String TOPIC_NAME="test";
+public class GlobalConstants {
+	/**
+	 * kafka topic
+	 */
+	public static final String TOPIC_NAME="mylog_cmcc";
 	/**
 	 * hbase单独一个zookeeper，免得数据干扰
 	 */
 	public static final String HBASE_ZOOKEEPER_LIST = "node4:2181";
-
 	/**
 	 * zookeeper
 	 */

@@ -19,9 +19,9 @@ package com.cmcc.kafka.productor;
 import java.util.Properties;
 import java.util.Random;
 
+import com.cmcc.tools.DateFmt;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import tools.DateFmt;
 import org.apache.storm.utils.Utils;
 
 public class Producer extends Thread {

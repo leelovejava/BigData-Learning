@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cmcc.hbase.constant.Constants;
+import com.cmcc.Constants;
 import com.cmcc.hbase.dao.HBaseDAO;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;

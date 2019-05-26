@@ -1,10 +1,5 @@
 package com.cmcc.spout;
 
-import java.util.Map;
-import java.util.Queue;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.cmcc.kafka.consumers.CellConsumer;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
@@ -14,13 +9,18 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 
+import java.util.Map;
+import java.util.Queue;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 public class LogSpout implements IRichSpout {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	String topic = null;
+	String topic;
 	
 	public LogSpout(String topic)
 	{
@@ -37,27 +37,19 @@ public class LogSpout implements IRichSpout {
 
 	@Override
 	public void activate() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void deactivate() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void fail(Object msgId) {
-		// TODO Auto-generated method stub
-
-//		queue.add(msgId);
 	}
 
 	@Override
@@ -72,8 +64,6 @@ public class LogSpout implements IRichSpout {
 	@Override
 	public void open(Map conf, TopologyContext context,
 			SpoutOutputCollector collector) {
-		// TODO Auto-generated method stub
-
 		this.collector = collector ;
 		CellConsumer consumer = new CellConsumer(topic) ;
 		consumer.start() ;
@@ -82,14 +72,11 @@ public class LogSpout implements IRichSpout {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		// TODO Auto-generated method stub
-
 		declarer.declare(new Fields("log")) ;
 	}
 
 	@Override
 	public Map<String, Object> getComponentConfiguration() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
