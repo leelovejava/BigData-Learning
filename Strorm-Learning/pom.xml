@@ -9,13 +9,15 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>storm-workcount</module>
+        <module>storm-sample</module>
         <module>storm-flume</module>
         <module>storm-kafka</module>
         <module>storm-redis</module>
         <module>storm-hbase</module>
-        <module>stream-drpc</module>
-        <module>stream-transactional</module>
+        <module>storm-drpc</module>
+        <module>storm-transactional</module>
+        <module>storm-cmccstormjk</module>
+        <module>storm-kafka-flume</module>
     </modules>
 
     <properties>
@@ -25,6 +27,7 @@
         <scala.version>2.11.8</scala.version>
         <spark.version>2.1.1</spark.version>
         <sotrm.version>1.2.1</sotrm.version>
+        <flume.version>1.9.0</flume.version>
     </properties>
 
     <dependencies>
@@ -57,5 +60,20 @@
             </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>maven-ali</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>;
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

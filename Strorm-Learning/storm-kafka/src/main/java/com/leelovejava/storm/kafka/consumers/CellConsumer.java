@@ -32,7 +32,7 @@ public class CellConsumer extends Thread {
         props.put("group.id", KafkaProperties.groupId);
         props.put("zookeeper.session.timeout.ms", "4000");
         props.put("zookeeper.sync.time.ms", "2000");
-        props.put("auto.commit.interval.ms", "1000");//
+        props.put("auto.commit.interval.ms", "1000");
 
         return new ConsumerConfig(props);
 
