@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cmcc.Constants;
 import com.cmcc.hbase.dao.HBaseDAO;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
@@ -36,7 +35,7 @@ public class HBaseDAOImpl implements HBaseDAO {
 	public HBaseDAOImpl() {
 		conf = new Configuration();
 		// ZooKeeper连接
-		String zk_list = Constants.HBASE_ZOOKEEPER_LIST;
+		String zk_list = com.cmcc.constant.GlobalConstants.HBASE_ZOOKEEPER_LIST;
 		conf.set("hbase.zookeeper.quorum", zk_list);
 		try {
 			hTablePool = HConnectionManager.createConnection(conf);
