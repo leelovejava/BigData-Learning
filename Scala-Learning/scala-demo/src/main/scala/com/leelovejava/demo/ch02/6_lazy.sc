@@ -7,13 +7,15 @@ def init(): String = {
 
 
 def noLazy() {
-  val property = init();//没有使用lazy修饰
+  //没有使用lazy修饰
+  val property = init();
   println("after init()")
   println(property)
 }
 
 def lazyed() {
-  lazy val property = init();//没有使用lazy修饰
+  //没有使用lazy修饰
+  lazy val property = init();
   println("after init()")
   println(property)
 }

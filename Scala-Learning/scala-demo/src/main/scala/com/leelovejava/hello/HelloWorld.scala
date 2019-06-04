@@ -1,4 +1,4 @@
-package com.leelovejava.obj
+package com.leelovejava.hello
 
 object HelloWorld {
 

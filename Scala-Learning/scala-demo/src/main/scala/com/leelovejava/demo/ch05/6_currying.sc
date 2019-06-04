@@ -13,7 +13,7 @@ mulOneAtATime(6)(7)
 def mulOneAtATime(x: Int)(y: Int) = x * y
 
 val a = Array("Hello", "World")
-val b = Array("hello", "world")
+val b = Array("com/leelovejava/hello", "world")
 // def corresponds[B](that: GenSeq[B])(p: (A,B) => Boolean): Boolean
 a.corresponds(b)(_.equalsIgnoreCase(_))
 
