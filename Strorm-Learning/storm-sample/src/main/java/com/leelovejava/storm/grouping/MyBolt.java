@@ -17,12 +17,12 @@ public class MyBolt implements IRichBolt {
 	int num = 0;
 	String valueString = null;
 
-
+	@Override
 	public void cleanup() {
 
 	}
 
-
+	@Override
 	public void execute(Tuple input) {
 		try {
 			valueString = input.getStringByField("log");
@@ -41,16 +41,17 @@ public class MyBolt implements IRichBolt {
 		}
 
 	}
+	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector = collector;
 	}
 
-
+	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields(""));
 	}
 
-
+	@Override
 	public Map<String, Object> getComponentConfiguration() {
 		return null;
 	}

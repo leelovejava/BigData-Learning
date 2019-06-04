@@ -21,12 +21,13 @@ public class RandomSentenceSpout extends BaseRichSpout {
     SpoutOutputCollector _collector;
     Random _rand;
 
-
+    @Override
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         _collector = collector;
         _rand = new Random();
     }
 
+    @Override
     public void nextTuple() {
         Utils.sleep(100);
         String[] sentences = new String[]{
@@ -54,6 +55,7 @@ public class RandomSentenceSpout extends BaseRichSpout {
     public void fail(Object id) {
     }
 
+    @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields("word"));
     }
@@ -69,7 +71,7 @@ public class RandomSentenceSpout extends BaseRichSpout {
         public TimeStamped(String prefix) {
             this.prefix = prefix;
         }
-
+        @Override
         protected String sentence(String input) {
             return prefix + currentDate() + " " + input;
         }

@@ -40,20 +40,20 @@ import java.util.Map;
 public class WordCountTopology {
     public static class SplitSentence implements IRichBolt {
         private OutputCollector _collector;
-
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
             declarer.declare(new Fields("word"));
         }
-
+        @Override
         public Map<String, Object> getComponentConfiguration() {
             return null;
         }
-
+        @Override
         public void prepare(Map stormConf, TopologyContext context,
                             OutputCollector collector) {
             _collector = collector;
         }
-
+        @Override
         public void execute(Tuple input) {
             String sentence = input.getStringByField("word");
             String[] words = sentence.split(" ");
@@ -61,7 +61,7 @@ public class WordCountTopology {
                 this._collector.emit(new Values(word));
             }
         }
-
+        @Override
         public void cleanup() {
 
         }
@@ -69,7 +69,7 @@ public class WordCountTopology {
 
     public static class WordCount extends BaseBasicBolt {
         Map<String, Integer> counts = new HashMap<String, Integer>();
-
+        @Override
         public void execute(Tuple tuple, BasicOutputCollector collector) {
             String word = tuple.getString(0);
             Integer count = counts.get(word);
@@ -79,7 +79,7 @@ public class WordCountTopology {
             counts.put(word, count);
             collector.emit(new Values(word, count));
         }
-
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
             declarer.declare(new Fields("word", "count"));
         }
@@ -87,13 +87,13 @@ public class WordCountTopology {
 
     public static class WordReport extends BaseBasicBolt {
         Map<String, Integer> counts = new HashMap<String, Integer>();
-
+        @Override
         public void execute(Tuple tuple, BasicOutputCollector collector) {
             String word = tuple.getStringByField("word");
             Integer count = tuple.getIntegerByField("count");
             this.counts.put(word, count);
         }
-
+        @Override
         public void declareOutputFields(OutputFieldsDeclarer declarer) {
 
         }
@@ -115,7 +115,7 @@ public class WordCountTopology {
     }
 
     public static void main(String[] args) throws Exception {
-
+        // 创建拓扑
         TopologyBuilder builder = new TopologyBuilder();
 
         builder.setSpout("spout", new RandomSentenceSpout(), 5);
@@ -132,7 +132,7 @@ public class WordCountTopology {
 
         if (args != null && args.length > 0) {
             conf.setNumWorkers(3);
-
+            // 向集群提交topology
             StormSubmitter.submitTopologyWithProgressBar(args[0], conf, builder.createTopology());
         } else {
             conf.setMaxTaskParallelism(3);

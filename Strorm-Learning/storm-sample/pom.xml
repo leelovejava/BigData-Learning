@@ -38,7 +38,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.leelovejava.storm.helloworld.topology.ExclamationTopology</mainClass>
+                            <mainClass>com.com.leelovejava.storm.helloworld.topology.ExclamationTopology</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

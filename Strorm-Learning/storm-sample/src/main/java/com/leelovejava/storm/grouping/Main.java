@@ -31,10 +31,10 @@ public class Main {
 		// fieldsGrouping其实就是MapReduce里面理解的Shuffle,根据fields求hash来取模
 //		builder.setBolt("bolt", new MyBolt(), 2).fieldsGrouping("spout", new Fields("session_id"));
 
-		// 只往一个里面发,往taskId小的那个里面去发送
+		// 全局分组,只往一个里面发,往taskId小的那个里面去发送
 //		builder.setBolt("bolt", new MyBolt(), 2).globalGrouping("spout");
 
-		// 等于shuffleGrouping
+		// 不分组,等于shuffleGrouping
 //		builder.setBolt("bolt", new MyBolt(), 2).noneGrouping("spout");
 
 		// 广播

@@ -23,7 +23,7 @@ public class MySpout implements IRichSpout {
 	SpoutOutputCollector collector = null;
 	String str = null;
 
-
+	@Override
 	public void nextTuple() {
 		try {
 			while ((str = this.br.readLine()) != null) {
@@ -35,7 +35,7 @@ public class MySpout implements IRichSpout {
 
 	}
 
-
+	@Override
 	public void close() {
 		try {
 			br.close();
@@ -46,7 +46,7 @@ public class MySpout implements IRichSpout {
 		}
 	}
 
-
+	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		try {
 			this.collector = collector;
@@ -58,30 +58,30 @@ public class MySpout implements IRichSpout {
 		}
 	}
 
-
+	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields("log", "session_id"));
 	}
 
-
+	@Override
 	public Map<String, Object> getComponentConfiguration() {
 		return null;
 	}
 
-
+	@Override
 	public void ack(Object msgId) {
 		System.out.println("spout ack:" + msgId.toString());
 	}
 
-
+	@Override
 	public void activate() {
 	}
 
-
+	@Override
 	public void deactivate() {
 	}
 
-
+	@Override
 	public void fail(Object msgId) {
 		System.out.println("spout fail:" + msgId.toString());
 	}
