@@ -11,5 +11,13 @@
 
     <artifactId>scala-demo</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-actors</artifactId>
+            <version>2.11.12</version>
+        </dependency>
+
+    </dependencies>
 
 </project>

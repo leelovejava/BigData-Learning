@@ -1,6 +1,6 @@
 // These are meant to be typed into the REPL. You can also run
 // scala -Xnojline < repl-session.sc to run them all at once.
-
+//
 // val不能改变
 val answer = 8 * 5 + 2
 
