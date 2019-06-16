@@ -1,4 +1,4 @@
-package com.atguigu.sparkcore
+package com.atguigu.sparkcore.wc
 
 import org.apache.spark.{SparkConf, SparkContext}
 import org.slf4j.LoggerFactory

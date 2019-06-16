@@ -1,4 +1,4 @@
-package com.mujie.youxiaospark;
+package com.atguigu.sparkcore.wc;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -17,7 +17,7 @@ public class SparkJavaWordCount {
         JavaRDD<String> lines = sc.textFile("./data/words");
         JavaRDD<String> words = lines.flatMap(line -> Arrays.asList(line.split(" ")).iterator());
 
-
+        // JavaRDD words.map()
         JavaPairRDD<String, Integer> pairWords = words.mapToPair( word -> new Tuple2<>(word, 1));
 
         JavaPairRDD<String, Integer> result = pairWords.reduceByKey((v1, v2) -> v1 + v2);
