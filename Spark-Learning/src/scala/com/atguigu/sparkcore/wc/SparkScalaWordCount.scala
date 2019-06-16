@@ -6,8 +6,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 object SparkScalaWordCount {
   def main(args: Array[String]): Unit = {
     val filePath = "D:/workspace2/BigData-Learning/Spark-Learning/src/resources/data/words"
-    sortWordCount(filePath)
-
+    //sortWordCount(filePath)
+    wc(filePath)
   }
 
   def tupleWordCount(filePath: String): Unit = {
@@ -36,6 +36,8 @@ object SparkScalaWordCount {
     result.foreach(tp => {
       println(tp)
     })
+
+    sc.stop()
   }
 
   /**
@@ -78,6 +80,15 @@ object SparkScalaWordCount {
 
     // result.sortBy(tp=>{tp._2},false).foreach(tp=>{println(tp)})
     // sortBy(tp => {tp._2},false)
+    sc.stop()
+  }
 
+  def wc(filePath: String): Unit = {
+    val sc = new SparkContext(new SparkConf().setMaster("local").setAppName("wc"))
+    sc.textFile(filePath).flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _).sortBy(_._2, false).foreach(println)
+
+    //sc.textFile(filePath).flatMap(_.split(" ")).map((_, 1)).reduceByKey(_ + _).map(_.swap).sortBy(_._2, false).map(_.swap).foreach(println)
+
+    sc.stop()
   }
 }
