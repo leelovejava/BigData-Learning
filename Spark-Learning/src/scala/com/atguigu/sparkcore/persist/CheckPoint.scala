@@ -1,4 +1,4 @@
-package com.atguigu.sparkcore.checkpoint
+package com.atguigu.sparkcore.persist
 
 import org.apache.spark.{SparkConf, SparkContext}
 

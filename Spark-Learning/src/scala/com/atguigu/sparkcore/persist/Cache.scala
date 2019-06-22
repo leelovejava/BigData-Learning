@@ -1,5 +1,6 @@
-package com.atguigu.sparkcore.cache
+package com.atguigu.sparkcore.persist
 
+import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -15,15 +16,22 @@ object Cache {
     val sc = new SparkContext(conf)
 
     val rdd = sc.parallelize(1 to 10)
-    val nocache = rdd.map(_.toString+"["+System.currentTimeMillis+"]")
+    val nocache = rdd.map(_.toString + "[" + System.currentTimeMillis + "]")
     nocache.collect()
 
 
-    val cache = rdd.map(_.toString+"["+System.currentTimeMillis+"]")
+    val cache: RDD[String] = rdd.map(_.toString + "[" + System.currentTimeMillis + "]")
     // action触发时缓存
     cache.cache()
+    cache.collect()
+    // res17: Array[String] = Array(1[1544089555831], 2[1544089555831], 3[1544089555831], 4[1544089555831], 5[1544089555831], 6[1544089555837], 7[1544089555838], 8[1544089555839], 9[1544089555841], 10[1544089555841])
 
+
+  }
+
+  def persist(sc: SparkContext, cache: RDD[String]): Unit = {
     /**
+      *
       * 存储级别
       *
       * 在存储级别的末尾加上“_2”来把持久化数据存为两份
@@ -40,13 +48,14 @@ object Cache {
       * val MEMORY_AND_DISK_SER : org.apache.spark.storage.StorageLevel       低           高             部分         部分  如果数据在内存中放不下,则溢出到磁盘上.在内存中存放系列化后的数据
       * val MEMORY_AND_DISK_SER_2 : org.apache.spark.storage.StorageLevel
       * val OFF_HEAP : org.apache.spark.storage.StorageLevel                                                                  默认,在内存有限时，可以减少频繁GC及不必要的内存消耗，提升程序性能
+      *
       */
-    //cache.persist(org.apache.spark.storage.StorageLevel.MEMORY_ONLY)
+    cache.persist(org.apache.spark.storage.StorageLevel.MEMORY_ONLY)
 
     // 缓存有可能丢失，或者存储存储于内存的数据由于内存不足而被删除，RDD的缓存容错机制保证了即使缓存丢失也能保证计算的正确执行
     // 通过基于RDD的一系列转换，丢失的数据会被重算，由于RDD的各个Partition是相对独立的，因此只需要计算丢失的部分即可，并不需要重算全部Partition
 
-    cache.collect()
-    // res17: Array[String] = Array(1[1544089555831], 2[1544089555831], 3[1544089555831], 4[1544089555831], 5[1544089555831], 6[1544089555837], 7[1544089555838], 8[1544089555839], 9[1544089555841], 10[1544089555841])
+
+
   }
 }
