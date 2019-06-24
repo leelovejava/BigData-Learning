@@ -20,7 +20,6 @@
 
 -------------------------
 
-.
 ├── META-INF
 │   └── MANIFEST.MF
 ├── SOFA-ARK
