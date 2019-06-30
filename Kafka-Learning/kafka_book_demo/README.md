@@ -8,3 +8,5 @@
 ![](https://img-blog.csdnimg.cn/20190221231530525.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTMyNTY4MTY=,size_16,color_FFFFFF,t_70)
 
 [《深入理解Kafka:核心设计与实践原理》笔误及改进记录](https://blog.csdn.net/u013256816/article/details/87834419)
+
+[为了追求极致的性能，Kafka掌控了这11项要领](https://mp.weixin.qq.com/s/JyQaohyDPndFJDrw4AOWww)
