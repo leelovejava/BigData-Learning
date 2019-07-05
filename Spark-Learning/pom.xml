@@ -24,6 +24,8 @@
         <elasticsearch.version>5.6.2</elasticsearch.version>
         <mongodb-spark.version>2.0.0</mongodb-spark.version>
         <casbah.version>3.1.1</casbah.version>
+        <jedis.version>3.0.1</jedis.version>
+        <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
     </properties>
 
     <repositories>
@@ -79,11 +81,18 @@
         </dependency>
         <!--机器学习-->
 
+        <!--连接 Redis 需要的包-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+
         <!--mysql驱动包-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.27</version>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
         <!--spark stream kafka start 消息队列-->
@@ -231,7 +240,7 @@
                     <archive>
                         <!--jar包中启动类-->
                         <manifest>
-                            <mainClass>com.atguigu.sparkstream.WorldCount</mainClass>
+                            <mainClass>com.leelovejava.sparkstream.WorldCount</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
