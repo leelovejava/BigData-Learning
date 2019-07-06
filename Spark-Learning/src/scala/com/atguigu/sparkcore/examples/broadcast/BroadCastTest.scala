@@ -1,9 +1,12 @@
-package com.atguigu.sparkcore.examples
+package com.atguigu.sparkcore.examples.broadcast
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
+/***
+  * 广播器
+  */
 object BroadCastTest {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()

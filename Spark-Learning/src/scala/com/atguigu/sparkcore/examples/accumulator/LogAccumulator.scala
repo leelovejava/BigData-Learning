@@ -1,4 +1,4 @@
-package com.atguigu.sparkcore.accumulator
+package com.atguigu.sparkcore.examples.accumulator
 
 import org.apache.spark.{SparkConf, SparkContext}
 
