@@ -1,6 +1,5 @@
 package com.atguigu.spark.core.sort;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -9,14 +8,10 @@ import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 
 /**
- * 分组取topN和topN
- * @author tianhao
+ * 分组求topN
  */
 public class GroupTest {
     public static void main(String[] args) {
@@ -38,25 +33,33 @@ public class GroupTest {
             public void call(Tuple2<String, Iterable<Integer>> tp) throws Exception {
                 String cls = tp._1;
                 Iterator<Integer> iter = tp._2.iterator();
-                List<Integer> list = IteratorUtils.toList(iter);
-                Collections.sort(list, new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer o1, Integer o2) {
-                        return o2 - o1;
-                    }
-                });
 
-                if (list.size() > 3) {
-                    for (int i = 0; i < 3; i++) {
+                Integer[] top3Score = new Integer[3];
 
-                        System.out.println("class = " + cls + ",value = " + list.get(i));
-                    }
-                } else {
-                    for (Integer score : list) {
-
-                        System.out.println("class = " + cls + ",value = " + score);
+                while (iter.hasNext()) {
+                    Integer currentScore = iter.next();
+                    for (int i = 0; i < top3Score.length; i++) {
+                        // 如果为null,直接赋值
+                        if (top3Score[i] == null) {
+                            top3Score[i] = currentScore;
+                            break;
+                        } else if (currentScore > top3Score[i]) {
+                            // 大于 移动后面的元素
+                            for (int j = 2; j > i; j--) {
+                                top3Score[j] = top3Score[j - 1];
+                            }
+                            //赋值
+                            top3Score[i] = currentScore;
+                            break;
+                        }
                     }
                 }
+
+                for (Integer cscore : top3Score) {
+
+                    System.out.println("class = " + cls + ",score = " + cscore);
+                }
+
 
             }
         });
