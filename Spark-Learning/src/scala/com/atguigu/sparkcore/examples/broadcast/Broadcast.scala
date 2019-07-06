@@ -16,6 +16,16 @@ import org.apache.spark.{SparkConf, SparkContext}
   * 和算子相关的代码是在Executor端执行
   */
 object Broadcast {
+
+  /*
+  // 高效分发较大的对象
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setMaster("local[2]").setAppName("BroadCast")
+    val sc = new SparkContext(conf)
+    val broadcastVar = sc.broadcast(Array(1, 2, 3))
+    broadcastVar.value
+  }*/
+
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()
     conf.setMaster("local")

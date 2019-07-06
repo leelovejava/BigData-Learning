@@ -12,19 +12,19 @@ object PipelineTest {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf().setMaster("local").setAppName("pipelineTest")
     val sc = new SparkContext(conf)
-    val names:RDD[String] = sc.parallelize(Array[String]("zhangsan","lisi","wangwu"))
+    val names: RDD[String] = sc.parallelize(Array[String]("zhangsan", "lisi", "wangwu"))
     val trans1: RDD[String] = names.filter(s => {
       println("*****filter*****" + s)
       true
     })
-    val trans2: RDD[String] = trans1.map(s=>{
-      println("######## map ##########"+s)
-      s+"#"
+    val trans2: RDD[String] = trans1.map(s => {
+      println("######## map ##########" + s)
+      s + "#"
     })
     trans2.foreach(println)
-    while(true){
+    while (true) {
 
     }
-//    sc.stop()
+    //    sc.stop()
   }
 }

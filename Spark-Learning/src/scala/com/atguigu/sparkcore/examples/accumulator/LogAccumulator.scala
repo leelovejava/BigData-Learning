@@ -3,7 +3,7 @@ package com.atguigu.sparkcore.examples.accumulator
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
-  * 自定义广播变量
+  * 自定义累加,可累加对象
   */
 class LogAccumulator extends org.apache.spark.util.AccumulatorV2[String, java.util.Set[String]] {
   private val _logArray: java.util.Set[String] = new java.util.HashSet[String]()

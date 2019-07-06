@@ -1,9 +1,9 @@
-package com.atguigu.sparkcore.examples
+package com.atguigu.sparkcore.examples.sort
 
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.collection.mutable
-import scala.util.control._
+import scala.util.control.Breaks
 
 /**
   * 分组取topN问题

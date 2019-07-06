@@ -1,4 +1,4 @@
-package com.atguigu.sparkcore.examples
+package com.atguigu.sparkcore.examples.sort
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}

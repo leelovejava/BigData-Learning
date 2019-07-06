@@ -1,4 +1,4 @@
-package com.atguigu.spark.core.examples;
+package com.atguigu.spark.core.examples.broadcast;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
