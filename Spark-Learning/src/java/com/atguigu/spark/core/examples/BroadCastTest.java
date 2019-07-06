@@ -12,7 +12,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 广播器
+ * java版的广播变量
+ *
+ * @author tianhao
  */
 public class BroadCastTest {
     public static void main(String[] args) {
