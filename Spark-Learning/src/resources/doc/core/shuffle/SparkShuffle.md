@@ -1,6 +1,13 @@
-## **SparkShuffle**
+# **SparkShuffle**
 
-### 1.  SparkShuffle概念
+## 1.  SparkShuffle概念
+
+洗牌的过程
+
+从不同的节点把相同的数据汇聚到一起(不同节点的数据,拉取到一个节点去处理)
+
+落地磁盘 不同节点的数据拉取
+
 
 reduceByKey会将上一个RDD中的每一个key对应的所有value聚合成一个value，然后生成一个新的RDD，元素类型是<key,value>对的形式，这样每一个key对应一个聚合起来的value。
 
@@ -14,13 +21,13 @@ reduceByKey会将上一个RDD中的每一个key对应的所有value聚合成一�
 
 Spark中有两种Shuffle管理类型，HashShufflManager和SortShuffleManager，Spark1.2之前是HashShuffleManager， Spark1.2引入SortShuffleManager,在Spark 2.0+版本中已经将HashShuffleManager丢弃。
 
-### 2.HashShuffleManager
+## 2.HashShuffleManager(过期 2.x去除)
 
-1) 普通机制
+### 1) 普通机制
 
-Ø 普通机制示意图
+ 普通机制示意图
 
-![img](../img/shuffle/01.png) 
+![img](img/01.png) 
 
 Ø 执行流程
 
@@ -40,6 +47,12 @@ M（map task的个数）*R（reduce task的个数）
 
 Ø 存在的问题
 
+- 小文件过多，耗时低效的IO操作
+
+- OOM,读写文件以及缓存过多(GC->OOM)
+
+  
+
 产生的磁盘小文件过多，会导致以下问题：
 
 a) 在Shuffle Write过程中会产生很多写磁盘小文件的对象。
@@ -50,77 +63,107 @@ c) 在JVM堆内存中对象过多会造成频繁的gc,gc还无法解决运行所
 
 d) 在数据传输过程中会有频繁的网络通信，频繁的网络通信出现通信故障的可能性大大增加，一旦网络通信出现了故障会导致shuffle file cannot find 由于这个错误导致的task失败，TaskScheduler不负责重试，由DAGScheduler负责重试Stage。
 
-2) 合并机制
+### 2) 合并机制(优化)
 
-Ø 合并机制示意图
+#### 2.2.1 合并机制示意图
 
-![img](../img/shuffle/02.png) 
+共用buffer缓冲区
 
-Ø 总结
+![img](img/02.png) 
+
+#### 2.2.2 总结
 
 产生磁盘小文件的个数：C(core的个数)*R（reduce的个数）
 
-### 3. SortShuffleManager
+## 3. SortShuffleManager
 
-1) 普通机制
+### 1) 普通机制
 
-Ø 普通机制示意图
+#### 3.1.1 普通机制示意图
 
-![img](../img/shuffle/03.png) 
+![img](img/03.png) 
 
-Ø 执行流程
+#### 3.1.2 执行流程
 
-a) map task 的计算结果会写入到一个内存数据结构里面，内存数据结构默认是5M
+a)  map task 的计算结果会写入到一个内存数据结构里面，内存数据结构默认是5M
 
-b) 在shuffle的时候会有一个定时器，不定期的去估算这个内存结构的大小，当内存结构中的数据超过5M时，比如现在内存结构中的数据为5.01M，那么他会申请5.01*2-5=5.02M内存给内存数据结构。
+b)  在shuffle的时候会有一个定时器，不定期的去估算这个内存结构的大小，当内存结构中的数据超过5M时，比如现在内存结构中的数据为5.01M，那么他会申请5.01*2-5=5.02M(两倍估算-当前)内存给内存数据结构。
 
-c) 如果申请成功不会进行溢写，如果申请不成功，这时候会发生溢写磁盘。
+c)  如果申请成功不会进行溢写，如果申请不成功，这时候会发生溢写磁盘。
 
-d) 在溢写之前内存结构中的数据会进行排序分区
+d)  在溢写之前内存结构中的数据会进行排序分区
 
-e) 然后开始溢写磁盘，写磁盘是以batch的形式去写，一个batch是1万条数据，
+e)  然后开始溢写磁盘，写磁盘是以batch的形式去写，一个batch是1万条数据，
 
-f) map task执行完成后，会将这些磁盘小文件合并成一个大的磁盘文件，同时生成一个索引文件。
+f)  map task执行完成后，会将这些磁盘小文件合并成一个大的磁盘文件，同时生成一个索引文件。
 
-g) reduce task去map端拉取数据的时候，首先解析索引文件，根据索引文件再去拉取对应的数据。
+g)  reduce task去map端拉取数据的时候，首先解析索引文件，根据索引文件再去拉取对应的数据。
 
-Ø 总结
+
+
+#### 3.1.3 总结
 
 产生磁盘小文件的个数： 2*M（map task的个数）
 
-2) bypass机制
 
-Ø bypass机制示意图
 
-![img](../img/shuffle/04.png) 
+### 2) bypass机制
 
-Ø 总结
+#### 3.2.1 bypass机制示意图
+
+归并排序
+
+![img](img/04.png) 
+
+#### 3.2.2 总结
 
 ① .bypass运行机制的触发条件如下：
 
-shuffle reduce task的数量小于spark.shuffle.sort.bypassMergeThreshold的参数值。这个值默认是200。
+* `shuffle reduce task`的数量小于`spark.shuffle.sort.bypassMergeThreshold`的参数值。这个值默认是200。
+
+* map端不能预聚合设置
 
 ② .产生的磁盘小文件为：2*M（map task的个数）
 
-### 4. Shuffle文件寻址
+和普通机制优化: 缺少排序(归并排序)、 预聚合(默认map端,看算子,例如: reduceByKey)
 
-1) MapOutputTracker
+ 
+
+Spark有各种算子，MR中只有map和reduce
+
+
+
+#### 3.2.3 产生磁盘小文件的个数
+
+hashshuffle普通: M（map task的个数）*R（reduce task的个数）
+
+hashshuffle优化: C(core的个数)*R（reduce的个数）
+
+SortShuffle普通:  2*M（map task的个数）
+
+SortShuffle bypass: 2*M（map task的个数）
+
+
+
+## 4. Shuffle文件寻址
+
+### 1) MapOutputTracker
 
 MapOutputTracker是Spark架构中的一个模块，是一个主从架构。管理磁盘小文件的地址。
 
-Ø MapOutputTrackerMaster是主对象，存在于Driver中。
+*  MapOutputTrackerMaster是主对象，存在于Driver中。
 
-Ø MapOutputTrackerWorker是从对象，存在于Excutor中。
+*  MapOutputTrackerWorker是从对象，存在于Excutor中。
 
-2) BlockManager
+### 2) BlockManager
 
 BlockManager块管理者，是Spark架构中的一个模块，也是一个主从架构。
 
-Ø BlockManagerMaster,主对象，存在于Driver中。
+* BlockManagerMaster,主对象，存在于Driver中。
 
-BlockManagerMaster会在集群中有用到广播变量和缓存数据或者删除缓存数据的时候，通知BlockManagerSlave传输或者删除数据。
+ BlockManagerMaster会在集群中有用到广播变量和缓存数据或者删除缓存数据的时候，通知BlockManagerSlave传输或者删除数据。
 
-Ø BlockManagerSlave，从对象，存在于Excutor中。
+* BlockManagerSlave，从对象，存在于Excutor中。
 
 BlockManagerSlave会与BlockManagerSlave之间通信。
 
@@ -132,11 +175,11 @@ BlockManagerSlave会与BlockManagerSlave之间通信。
 
 ③ BlockTransferService:负责数据的传输。
 
-3) Shuffle文件寻址图
+### 3) Shuffle文件寻址图
 
-![img](../img/shuffle/05.png) 
+![img](img/05.png) 
 
-4) Shuffle文件寻址流程
+### 4) Shuffle文件寻址流程
 
 a) 当map task执行完成后，会将task的执行情况和磁盘小文件的地址封装到MpStatus对象中，通过MapOutputTrackerWorker对象向Driver中的MapOutputTrackerMaster汇报。
 
@@ -148,7 +191,7 @@ d) 获取到磁盘小文件的地址后，会通过BlockManager连接数据所�
 
 e) BlockTransferService默认启动5个task去节点拉取数据。默认情况下，5个task拉取数据量不能超过48M。
 
-### **5. Spark内存管理**
+## **5. Spark内存管理**
 
 Spark执行应用程序时，Spark集群会启动Driver和Executor两种JVM进程，Driver负责创建SparkContext上下文，提交任务，task的分发等。Executor负责task的计算任务，并将结果返回给Driver。同时需要为需要持久化的RDD提供储存。Driver端的内存管理比较简单，这里所说的Spark内存管理针对Executor端的内存管理。
 
@@ -160,15 +203,15 @@ Spark内存管理分为静态内存管理和统一内存管理，Spark1.6之前�
 
 Spark1.6以上版本默认使用的是统一内存管理，可以通过参数spark.memory.useLegacyMode 设置为true(默认为false)使用静态内存管理。
 
-####  5.1 静态内存管理分布图
+###  5.1 静态内存管理分布图
 
-![img](../img/shuffle/06.png) 
+![img](img/06.png) 
 
-#### 5.2 统一内存管理分布图
+### 5.2 统一内存管理分布图
 
-  ![img](../img/shuffle/07.png)
+  ![img](img/07.png)
 
-#### 5.3. reduce 中OOM如何处理？
+### 5.3. reduce 中OOM如何处理？
 
 1) 减少每次拉取的数据量
 
@@ -176,7 +219,7 @@ Spark1.6以上版本默认使用的是统一内存管理，可以通过参数spa
 
 3) 提高Excutor的总内存
 
-### 6. Shuffle调优
+## 6. Shuffle调优
 
 SparkShuffle调优配置项如何使用？
 
