@@ -275,3 +275,15 @@ shuffle file not find    taskScheduler不负责重试task，由DAGScheduler负�
 默认值：false
 参数说明：如果使用HashShuffleManager，该参数有效。如果设置为true，那么就会开启consolidate机制，会大幅度合并shuffle write的输出文件，对于shuffle read task数量特别多的情况下，这种方法可以极大地减少磁盘IO开销，提升性能。
 调优建议：如果的确不需要SortShuffleManager的排序机制，那么除了使用bypass机制，还可以尝试将spark.shffle.manager参数手动指定为hash，使用HashShuffleManager，同时开启consolidate机制。在实践中尝试过，发现其性能比开启了bypass机制的SortShuffleManager要高出10%~30%。
+
+
+
+配置位置:
+
+1. 代码中conf.set(k,v)
+
+2. default.conf
+
+3. -- conf 提交任务
+
+   推荐使用conf 提交任务方式
