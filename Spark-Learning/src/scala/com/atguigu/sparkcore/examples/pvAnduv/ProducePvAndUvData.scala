@@ -6,6 +6,7 @@ import java.util.{Date, Random}
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.io.PrintWriter
+
 /**
   * 向文件中生产数据
   */
@@ -14,11 +15,11 @@ object ProducePvAndUvData {
   //ip
   val IP = 223
   //地址
-  val ADDRESS = Array("北京", "天津", "上海", "重庆", "河北", "辽宁","山西",
-                      "吉林", "江苏", "浙江", "黑龙江", "安徽", "福建", "江西",
-                      "山东", "河南", "湖北", "湖南", "广东", "海南", "四川",
-                      "贵州", "云南", "山西", "甘肃", "青海", "台湾", "内蒙",
-                      "广西", "西藏", "宁夏", "新疆", "香港", "澳门")
+  val ADDRESS = Array("北京", "天津", "上海", "重庆", "河北", "辽宁", "山西",
+    "吉林", "江苏", "浙江", "黑龙江", "安徽", "福建", "江西",
+    "山东", "河南", "湖北", "湖南", "广东", "海南", "四川",
+    "贵州", "云南", "山西", "甘肃", "青海", "台湾", "内蒙",
+    "广西", "西藏", "宁夏", "新疆", "香港", "澳门")
   //日期
   val DATE = new SimpleDateFormat("yyyy-MM-dd").format(new Date())
   //timestamp
@@ -44,7 +45,7 @@ object ProducePvAndUvData {
     if (createFile) {
       var i = 0
       //产生5万+数据
-      while (i < 50000){ //模拟一个ip
+      while (i < 50000) { //模拟一个ip
         val random = new Random()
         val ip = random.nextInt(IP) + "." + random.nextInt(IP) + "." + random.nextInt(IP) + "." + random.nextInt(IP)
         //模拟地址
