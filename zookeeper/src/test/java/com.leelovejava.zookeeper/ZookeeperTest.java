@@ -1,4 +1,4 @@
-package com.leelovejava.zookeeper.test;
+package com.leelovejava.zookeeper;
 
 import java.io.IOException;
 import java.util.List;
