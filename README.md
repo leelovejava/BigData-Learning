@@ -5,7 +5,7 @@ boot-scala           scala和spring整合
 
 Zk                   zookeeper
 
-Sping-Hadoop         spring官方整合hadop
+Spring-Hadoop         spring官方整合hadoop
 
 hdfs-demo             hdfs操作
 
