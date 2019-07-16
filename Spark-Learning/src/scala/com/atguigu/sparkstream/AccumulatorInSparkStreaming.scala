@@ -17,15 +17,15 @@ object AccumulatorInSparkStreaming {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()
     conf.setAppName("WordCountOnLine").setMaster("local[2]")
-    val ssc = new StreamingContext(conf,Durations.seconds(5))
+    val ssc = new StreamingContext(conf, Durations.seconds(5))
     ssc.sparkContext.setLogLevel("ERROR")
     val globalAcc: LongAccumulator = ssc.sparkContext.longAccumulator("globalAcc")
 
-    val lines: ReceiverInputDStream[String] = ssc.socketTextStream("mynode5",9999)
-    val result = lines.flatMap(line=>{
+    val lines: ReceiverInputDStream[String] = ssc.socketTextStream("mynode5", 9999)
+    val result = lines.flatMap(line => {
       line.split(" ")
     })
-    result.foreachRDD(wordCountRDD=>{
+    result.foreachRDD(wordCountRDD => {
       val sc: SparkContext = wordCountRDD.context
       val myacc: LongAccumulator = sc.longAccumulator("myacc")
       val value: RDD[String] = wordCountRDD.map(word => {

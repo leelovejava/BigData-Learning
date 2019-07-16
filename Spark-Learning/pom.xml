@@ -24,6 +24,7 @@
         <elasticsearch.version>5.6.2</elasticsearch.version>
         <mongodb-spark.version>2.0.0</mongodb-spark.version>
         <casbah.version>3.1.1</casbah.version>
+        <jedis.verson>2.9.0</jedis.verson>
     </properties>
 
     <repositories>
@@ -166,6 +167,13 @@
             <version>${casbah.version}</version>
         </dependency>
         <!--spark mongodb start-->
+
+        <!--redis-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.verson}</version>
+        </dependency>
 
         <!-- Logging -->
         <dependency>

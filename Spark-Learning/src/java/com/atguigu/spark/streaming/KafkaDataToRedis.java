@@ -15,7 +15,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.*;
 
-public class StreamingKafkaDataToRedis {
+public class KafkaDataToRedis {
     public static void main(String[] args) throws InterruptedException {
         SparkConf conf = new SparkConf();
         conf.setMaster("local").setAppName("StreamingToRedis");
@@ -23,7 +23,7 @@ public class StreamingKafkaDataToRedis {
         Collection<String> topics = Arrays.asList("topicA");
 
         Map<String, Object> kafkaParams = new HashMap<>();
-        kafkaParams.put("bootstrap.servers", "c7node1:9092,c7node2:9092,c7node3:9092");
+        kafkaParams.put("bootstrap.servers", "node01:9092,node02:9092,node03:9092");
         kafkaParams.put("key.deserializer", StringDeserializer.class);
         kafkaParams.put("value.deserializer", StringDeserializer.class);
         kafkaParams.put("group.id", "group1108");
