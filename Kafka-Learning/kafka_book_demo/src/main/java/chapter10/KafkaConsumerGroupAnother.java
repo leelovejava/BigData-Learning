@@ -15,7 +15,9 @@ import java.util.Optional;
 
 /**
  * 代码清单10-3
- * Created by 朱小厮 on 2018/10/22.
+ *
+ * @author 朱小厮
+ * @date 2018/10/22.
  */
 public class KafkaConsumerGroupAnother {
 
@@ -39,7 +41,7 @@ public class KafkaConsumerGroupAnother {
                 collectGroupOffsets()._2.get());
         //4. 将JSON字符串反序列化成Java对象
         List<PartitionAssignmentStateAnother> target = mapper.readValue(source,
-                getCollectionType(mapper,List.class,
+                getCollectionType(mapper, List.class,
                         PartitionAssignmentStateAnother.class));
         //5. 排序
         target.sort((o1, o2) -> o1.getPartition() - o2.getPartition());
@@ -80,7 +82,7 @@ class PartitionAssignmentStateAnother {
     private long logSize;
 
     @Data
-    public static class Node{
+    public static class Node {
         public int id;
         public String idString;
         public String host;

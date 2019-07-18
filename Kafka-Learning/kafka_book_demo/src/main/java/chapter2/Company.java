@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 /**
  * 代码清单2-3中的Company类
- * Created by 朱小厮 on 2018/7/26.
+ * @author 朱小厮
+ * @date 2018/7/26.
  */
 @Data
 @NoArgsConstructor

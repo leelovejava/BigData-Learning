@@ -14,10 +14,11 @@ import java.util.*;
 
 /**
  * 代码清单7-3
- * Created by 朱小厮 on 2018/10/18.
+ * @author 朱小厮
+ * @date 2018/10/18.
  */
 public class TransactionConsumeTransformProduce {
-    public static final String brokerList = "10.198.197.73:9092";
+    public static final String brokerList = "node01:9092";
 
     public static Properties getConsumerProperties(){
         Properties props = new Properties();

@@ -14,7 +14,8 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * 代码清单9-1
- * Created by 朱小厮的博客 on 2018/10/23.
+ * @author 朱小厮
+ * @date 2018/10/23.
  */
 public class CheckBeginingOffset {
     public static void main(String[] args) {

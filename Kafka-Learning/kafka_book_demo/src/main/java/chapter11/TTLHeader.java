@@ -3,10 +3,14 @@ package chapter11;
 import org.apache.kafka.common.header.Header;
 
 /**
- * Created by 朱小厮 on 2018/8/12.
+ * @author 朱小厮
+ * @date 2018/8/12.
  */
 public class TTLHeader implements Header {
-    private long ttl;//超时时间，单位为秒
+    /**
+     * 超时时间，单位为秒
+     */
+    private long ttl;
 
     public TTLHeader(long ttl) {
         this.ttl = ttl;
@@ -17,8 +21,13 @@ public class TTLHeader implements Header {
         return "ttl";
     }
 
+    /**
+     * 将long类型转成byte[]类型
+     *
+     * @return
+     */
     @Override
-    public byte[] value() { //将long类型转成byte[]类型
+    public byte[] value() {
         long res = this.ttl;
         byte[] buffer = new byte[8];
         for (int i = 0; i < 8; i++) {

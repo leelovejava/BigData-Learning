@@ -9,7 +9,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 import scala.collection.JavaConversions
 
 /**
-  * Created by 朱小厮 on 2019-03-04.
+  * @author 朱小厮
+  * @date 2019-03-04.
   */
 object RDDWithKafka {
   private val brokers = "localhost:9092"
@@ -28,17 +29,17 @@ object RDDWithKafka {
     )
 
     val offsetRanges = Array(
-      OffsetRange(topic,0,0,100),
-      OffsetRange(topic,1,0,100),
-      OffsetRange(topic,2,0,100),
-      OffsetRange(topic,3,0,100)
+      OffsetRange(topic, 0, 0, 100),
+      OffsetRange(topic, 1, 0, 100),
+      OffsetRange(topic, 2, 0, 100),
+      OffsetRange(topic, 3, 0, 100)
     )
     val rdd = KafkaUtils.createRDD(ssc,
       JavaConversions.mapAsJavaMap(kafkaParams),
       offsetRanges, PreferConsistent)
-    rdd.foreachPartition(records=>{
-      records.foreach(record=>{
-        println(record.topic()+":"+record.partition()+":"+ record.value())
+    rdd.foreachPartition(records => {
+      records.foreach(record => {
+        println(record.topic() + ":" + record.partition() + ":" + record.value())
       })
     })
   }

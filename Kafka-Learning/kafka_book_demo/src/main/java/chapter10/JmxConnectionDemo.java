@@ -8,7 +8,9 @@ import java.io.IOException;
 
 /**
  * 代码清单10-1
- * Created by 朱小厮 on 2018/10/20.
+ *
+ * @author 朱小厮
+ * @date 2018/10/20.
  */
 public class JmxConnectionDemo {
     private MBeanServerConnection conn;
@@ -19,7 +21,7 @@ public class JmxConnectionDemo {
         this.ipAndPort = ipAndPort;
     }
 
-    public boolean init(){
+    public boolean init() {
         jmxURL = "service:jmx:rmi:///jndi/rmi://" + ipAndPort + "/jmxrmi";
         try {
             JMXServiceURL serviceURL = new JMXServiceURL(jmxURL);
@@ -34,7 +36,6 @@ public class JmxConnectionDemo {
         }
         return true;
     }
-
 
 
     public double getMsgInPerSec() {

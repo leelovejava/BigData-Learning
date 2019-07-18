@@ -20,7 +20,9 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * 代码清单10-2
- * Created by 朱小厮 on 2018/10/21.
+ *
+ * @author 朱小厮
+ * @date 2018/10/21.
  */
 @Slf4j
 public class KafkaConsumerGroupService {
@@ -32,7 +34,7 @@ public class KafkaConsumerGroupService {
         this.brokerList = brokerList;
     }
 
-    public void init(){
+    public void init() {
         Properties props = new Properties();
         props.put(CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, brokerList);
         adminClient = AdminClient.create(props);
@@ -40,7 +42,7 @@ public class KafkaConsumerGroupService {
                 "kafkaAdminClientDemoGroupId");
     }
 
-    public void close(){
+    public void close() {
         if (adminClient != null) {
             adminClient.close();
         }
@@ -127,7 +129,7 @@ public class KafkaConsumerGroupService {
                     .offset(offset).consumerId(member.consumerId())
                     .host(member.host()).clientId(member.clientId())
                     .logSize(logSize).build();
-        }else {
+        } else {
             return PartitionAssignmentState.builder()
                     .group(group).coordinator(description.coordinator())
                     .topic(tp.topic()).partition(tp.partition())
@@ -177,7 +179,7 @@ public class KafkaConsumerGroupService {
     }
 }
 
-class ConsumerGroupUtils{
+class ConsumerGroupUtils {
     public static KafkaConsumer<String, String> createNewConsumer(
             String brokerUrl, String groupId) {
         Properties props = new Properties();

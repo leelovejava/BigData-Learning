@@ -7,14 +7,16 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 代码清单4-3 & 4-4
- * Created by 朱小厮 on 2018/7/21.
+ *
+ * @author 朱小厮
+ * @date 2018/7/21.
  */
 public class KafkaAdminTopicOperation {
     public static final String brokerList = "localhost:9092";
     public static final String topic = "topic-admin";
 
-    public static void describeTopic(){
-        String brokerList =  "localhost:9092";
+    public static void describeTopic() {
+        String brokerList = "localhost:9092";
         String topic = "topic-admin";
 
         Properties props = new Properties();
@@ -24,7 +26,7 @@ public class KafkaAdminTopicOperation {
 
         DescribeTopicsResult result = client.describeTopics(Collections.singleton(topic));
         try {
-            Map<String, TopicDescription> descriptionMap =  result.all().get();
+            Map<String, TopicDescription> descriptionMap = result.all().get();
             System.out.println(descriptionMap.get(topic));
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -33,7 +35,7 @@ public class KafkaAdminTopicOperation {
     }
 
     public static void createTopic() {
-        String brokerList =  "localhost:9092";
+        String brokerList = "localhost:9092";
         String topic = "topic-admin";
 
         Properties props = new Properties();
@@ -66,8 +68,8 @@ public class KafkaAdminTopicOperation {
         client.close();
     }
 
-    public static void deleteTopic(){
-        String brokerList =  "localhost:9092";
+    public static void deleteTopic() {
+        String brokerList = "localhost:9092";
         String topic = "topic-admin";
 
         Properties props = new Properties();

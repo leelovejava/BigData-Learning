@@ -10,20 +10,23 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 /**
- * Created by 朱小厮 on 2018/7/26.
+ * @author 朱小厮
+ * @date 2018/7/26.
  */
 public class ProtostuffSerializer implements Serializer<Company> {
+    @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
     }
 
+    @Override
     public byte[] serialize(String topic, Company data) {
         if (data == null) {
             return null;
         }
-        Schema schema = (Schema) RuntimeSchema.getSchema(data.getClass());
+        Schema schema = RuntimeSchema.getSchema(data.getClass());
         LinkedBuffer buffer =
                 LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
-        byte[] protostuff = null;
+        byte[] protostuff;
         try {
             protostuff = ProtostuffIOUtil.toByteArray(data, schema, buffer);
         } catch (Exception e) {
@@ -34,6 +37,7 @@ public class ProtostuffSerializer implements Serializer<Company> {
         return protostuff;
     }
 
+    @Override
     public void close() {
     }
 }

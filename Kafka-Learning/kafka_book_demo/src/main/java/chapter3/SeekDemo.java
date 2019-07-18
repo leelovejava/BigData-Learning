@@ -14,7 +14,9 @@ import java.util.Set;
 
 /**
  * 代码清单3-5
- * Created by 朱小厮 on 2018/8/19.
+ *
+ * @author 朱小厮
+ * @date 2018/8/19.
  */
 public class SeekDemo {
     public static final String brokerList = "localhost:9092";

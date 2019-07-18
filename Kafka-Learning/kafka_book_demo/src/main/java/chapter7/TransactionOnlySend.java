@@ -10,7 +10,8 @@ import java.util.Properties;
 
 /**
  * 代码清单7-2
- * Created by 朱小厮 on 2018/10/17.
+ * @author 朱小厮
+ * @date 2018/10/17.
  */
 public class TransactionOnlySend {
     public static final String topic = "topic-transaction";

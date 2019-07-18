@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 代码清单11-1
- * Created by 朱小厮 on 2018/8/12.
+ * @author 朱小厮 @date 2018/8/12.
  */
 public class ProducertTTL {
     public static final String brokerList = "localhost:9092";

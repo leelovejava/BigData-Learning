@@ -11,10 +11,11 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- * Created by 朱小厮 on 2018/8/12.
+ * @author 朱小厮
+ * @date 2018/8/12.
  */
 public class ConsumerTTL {
-    public static final String brokerList = "10.198.197.73:9092";
+    public static final String brokerList = "node01:9092";
     public static final String topic = "topic-demo";
     public static final String groupId = "group.interceptor";
 

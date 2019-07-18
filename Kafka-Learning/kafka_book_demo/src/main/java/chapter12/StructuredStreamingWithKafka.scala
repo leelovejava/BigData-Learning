@@ -5,14 +5,16 @@ import org.apache.spark.sql.SparkSession
 
 /**
   * 代码清单12-5
-  * Created by 朱小厮 on 2019-03-04.
+  *
+  * @author 朱小厮
+  * @date 2019-03-04.
   */
 class StructuredStreamingWithKafka {
 
   object StructuredStreamingWithKafka {
-    //Kafka 集群的地址
+    // Kafka 集群的地址
     val brokerList = "localhost:9092"
-    //订阅的主题
+    // 订阅的主题
     val topic = "topic-spark"
 
     def main(args: Array[String]): Unit = {

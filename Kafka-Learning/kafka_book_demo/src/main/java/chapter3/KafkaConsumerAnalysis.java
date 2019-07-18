@@ -12,7 +12,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 代码清单3-1
- * Created by 朱小厮 on 2018/7/22.
+ *
+ * @author 朱小厮
+ * @date 2018/7/22.
  */
 @Slf4j
 public class KafkaConsumerAnalysis {

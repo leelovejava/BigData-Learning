@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by 朱小厮 on 2019-03-02.
+ * @author 朱小厮
+ * @date 2019-03-02.
  */
 public class BroadcastAssignor extends AbstractPartitionAssignor {
     @Override
@@ -35,7 +36,7 @@ public class BroadcastAssignor extends AbstractPartitionAssignor {
                 assignment.put(memberId, new ArrayList<>()));
 
         //针对每一个主题，为每一个订阅的消费者分配所有的分区
-        consumersPerTopic.entrySet().forEach(topicEntry->{
+        consumersPerTopic.entrySet().forEach(topicEntry -> {
             String topic = topicEntry.getKey();
             List<String> members = topicEntry.getValue();
 
@@ -43,7 +44,7 @@ public class BroadcastAssignor extends AbstractPartitionAssignor {
             if (numPartitionsForTopic == null || members.isEmpty())
                 return;
             List<TopicPartition> partitions = AbstractPartitionAssignor
-                .partitions(topic, numPartitionsForTopic);
+                    .partitions(topic, numPartitionsForTopic);
             if (!partitions.isEmpty()) {
                 members.forEach(memberId ->
                         assignment.get(memberId).addAll(partitions));

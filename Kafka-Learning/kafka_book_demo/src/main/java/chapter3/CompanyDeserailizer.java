@@ -9,12 +9,14 @@ import java.nio.ByteBuffer;
 import java.util.Map;
 
 /**
- * Created by 朱小厮 on 2018/7/26.
+ * @author 朱小厮 @date 2018/7/26.
  */
 public class CompanyDeserailizer implements Deserializer<Company> {
+    @Override
     public void configure(Map<String, ?> configs, boolean isKey) {
     }
 
+    @Override
     public Company deserialize(String topic, byte[] data) {
         if (data == null) {
             return null;

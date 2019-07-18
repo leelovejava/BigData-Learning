@@ -10,7 +10,9 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * 代码清单2-4
- * Created by 朱小厮 on 2018/7/26.
+ *
+ * @author 朱小厮
+ * @date 2018/7/26.
  */
 public class ProducerSelfSerializer {
     public static final String brokerList = "localhost:9092";

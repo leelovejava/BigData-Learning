@@ -6,7 +6,8 @@ import org.apache.kafka.common.TopicPartition;
 import java.util.*;
 
 /**
- * Created by 朱小厮 on 2019-03-02.
+ * @author 朱小厮
+ * @date 2019-03-02.
  */
 public class RandomAssignor extends AbstractPartitionAssignor {
     @Override
@@ -32,7 +33,7 @@ public class RandomAssignor extends AbstractPartitionAssignor {
             //当前主题下的所有分区
             List<TopicPartition> partitions =
                     AbstractPartitionAssignor.partitions(topic,
-                    numPartitionsForTopic);
+                            numPartitionsForTopic);
             //将每个分区随机分配给一个消费者
             for (TopicPartition partition : partitions) {
                 int rand = new Random().nextInt(consumerSize);
@@ -48,7 +49,7 @@ public class RandomAssignor extends AbstractPartitionAssignor {
         return "name";
     }
 
-    private Map<String,List<String>> consumersPerTopic(Map<String,Subscription> consumerMetadata){
+    private Map<String, List<String>> consumersPerTopic(Map<String, Subscription> consumerMetadata) {
         Map<String, List<String>> res = new HashMap<>();
         for (Map.Entry<String, Subscription> subscriptionEntry : consumerMetadata.entrySet()) {
             String consumerId = subscriptionEntry.getKey();

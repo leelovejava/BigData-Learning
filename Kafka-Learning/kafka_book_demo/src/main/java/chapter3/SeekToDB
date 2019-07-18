@@ -1,7 +1,7 @@
 
 /**
  * 代码清单3-8
- * Created by 朱小厮 on 2019-02-27.
+ * @author 朱小厮 on 2019-02-27.
  */
 
 consumer.subscribe(Arrays.asList(topic));

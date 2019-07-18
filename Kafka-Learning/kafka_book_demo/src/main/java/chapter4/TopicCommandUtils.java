@@ -2,7 +2,9 @@ package chapter4;
 
 /**
  * 代码清单4-1 & 4-2
- * Created by 朱小厮 on 2018/9/9.
+ *
+ * @author 朱小厮
+ * @date 2018/9/9.
  */
 public class TopicCommandUtils {
 
@@ -15,7 +17,7 @@ public class TopicCommandUtils {
     /**
      * 代码清单4-1
      */
-    public static void createTopic(){
+    public static void createTopic() {
         String[] options = new String[]{
                 "--zookeeper", "localhost:2181/kafka",
                 "--create",
@@ -29,7 +31,7 @@ public class TopicCommandUtils {
     /**
      * 代码清单4-2
      */
-    public static void describeTopic(){
+    public static void describeTopic() {
         String[] options = new String[]{
                 "--zookeeper", "localhost:2181/kafka",
                 "--describe",
@@ -38,7 +40,7 @@ public class TopicCommandUtils {
         kafka.admin.TopicCommand.main(options);
     }
 
-    public static void listTopic(){
+    public static void listTopic() {
         String[] options = new String[]{
                 "--zookeeper", "localhost:2181/kafka",
                 "--list"

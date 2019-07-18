@@ -15,7 +15,9 @@ import java.util.Map;
 
 /**
  * 代码清单11-2
- * Created by 朱小厮 on 2018/8/1.
+ *
+ * @author 朱小厮
+ * @date 2018/8/1.
  */
 public class ConsumerInterceptorTTL implements
         ConsumerInterceptor<String, String> {
@@ -32,7 +34,8 @@ public class ConsumerInterceptorTTL implements
             for (ConsumerRecord<String, String> record : tpRecords) {
                 Headers headers = record.headers();
                 long ttl = -1;
-                for (Header header : headers) {//判断headers中是否有key为"ttl"的Header
+                for (Header header : headers) {
+                    // 判断headers中是否有key为"ttl"的Header
                     if (header.key().equalsIgnoreCase("ttl")) {
                         ttl = BytesUtils.bytesToLong(header.value());
                     }
@@ -40,7 +43,8 @@ public class ConsumerInterceptorTTL implements
                 //消息超时判定
                 if (ttl > 0 && now - record.timestamp() < ttl * 1000) {
                     newTpRecords.add(record);
-                } else {//没有设置ttl,无需超时判定
+                } else {
+                    // 没有设置ttl,无需超时判定
                     newTpRecords.add(record);
                 }
             }
