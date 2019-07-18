@@ -6,10 +6,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
-  * Created by wuyufei on 2017/9/22.
-  * 追求者
+  * @author wuyufei
+  * @date 2017/9/22.
+  *       追求者
   */
-object Practice extends App{
+object Practice extends App {
 
   //屏蔽日志
   Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
@@ -55,7 +56,7 @@ object Practice extends App{
   println("属性演示")
   println("**********************************************************")
   println("找出图中年龄大于30的顶点：")
-  graph.vertices.filter { case (id, (name, age)) => age > 30}.collect.foreach {
+  graph.vertices.filter { case (id, (name, age)) => age > 30 }.collect.foreach {
     case (id, (name, age)) => println(s"$name is $age")
   }
 
@@ -74,9 +75,11 @@ object Practice extends App{
 
   //Degrees操作
   println("找出图中最大的出度、入度、度数：")
+
   def max(a: (VertexId, Int), b: (VertexId, Int)): (VertexId, Int) = {
     if (a._2 > b._2) a else b
   }
+
   println("max of outDegrees:" + graph.outDegrees.reduce(max) + " max of inDegrees:" + graph.inDegrees.reduce(max) + " max of Degrees:" + graph.degrees.reduce(max))
   println
 
@@ -84,13 +87,13 @@ object Practice extends App{
   println("转换操作")
   println("**********************************************************")
   println("顶点的转换操作，顶点age + 10：")
-  graph.mapVertices{ case (id, (name, age)) => (id, (name, age+10))}.vertices.collect.foreach(v => println(s"${v._2._1} is ${v._2._2}"))
+  graph.mapVertices { case (id, (name, age)) => (id, (name, age + 10)) }.vertices.collect.foreach(v => println(s"${v._2._1} is ${v._2._2}"))
   println
   println("边的转换操作，边的属性*2：")
-  graph.mapEdges(e=>e.attr*2).edges.collect.foreach(e => println(s"${e.srcId} to ${e.dstId} att ${e.attr}"))
+  graph.mapEdges(e => e.attr * 2).edges.collect.foreach(e => println(s"${e.srcId} to ${e.dstId} att ${e.attr}"))
   println
   println("三元组的转换操作，边的属性为端点的age相加：")
-  graph.mapTriplets(tri=>tri.srcAttr._2 * tri.dstAttr._2).triplets.collect.foreach(e => println(s"${e.srcId} to ${e.dstId} att ${e.attr}"))
+  graph.mapTriplets(tri => tri.srcAttr._2 * tri.dstAttr._2).triplets.collect.foreach(e => println(s"${e.srcId} to ${e.dstId} att ${e.attr}"))
   println
 
   //***************************  结构操作    ****************************************
@@ -117,16 +120,17 @@ object Practice extends App{
   println("连接操作")
   println("**********************************************************")
   val inDegrees: VertexRDD[Int] = graph.inDegrees
+
   case class User(name: String, age: Int, inDeg: Int, outDeg: Int)
 
   //创建一个新图，顶类点VD的数据型为User，并从graph做类型转换
-  val initialUserGraph: Graph[User, Int] = graph.mapVertices { case (id, (name, age)) => User(name, age, 0, 0)}
+  val initialUserGraph: Graph[User, Int] = graph.mapVertices { case (id, (name, age)) => User(name, age, 0, 0) }
 
   //initialUserGraph与inDegrees、outDegrees（RDD）进行连接，并修改initialUserGraph中inDeg值、outDeg值
   val userGraph = initialUserGraph.outerJoinVertices(initialUserGraph.inDegrees) {
     case (id, u, inDegOpt) => User(u.name, u.age, inDegOpt.getOrElse(0), u.outDeg)
   }.outerJoinVertices(initialUserGraph.outDegrees) {
-    case (id, u, outDegOpt) => User(u.name, u.age, u.inDeg,outDegOpt.getOrElse(0))
+    case (id, u, outDegOpt) => User(u.name, u.age, u.inDeg, outDegOpt.getOrElse(0))
   }
 
   println("连接图的属性：")
@@ -145,10 +149,20 @@ object Practice extends App{
   println("聚合操作")
   println("**********************************************************")
   println("collectNeighbors：获取当前节点source节点的id和属性")
-  graph.collectNeighbors(EdgeDirection.In).collect.foreach(v => {println(s"id: ${v._1}"); for(arr<- v._2){ println(s"      ${arr._1} (name: ${arr._2._1}  age: ${arr._2._2})") }})
+  graph.collectNeighbors(EdgeDirection.In).collect.foreach(v => {
+    println(s"id: ${v._1}");
+    for (arr <- v._2) {
+      println(s"      ${arr._1} (name: ${arr._2._1}  age: ${arr._2._2})")
+    }
+  })
 
   println("aggregateMessages版本：")
-  graph.aggregateMessages[Array[(VertexId,(String,Int))]](ctx => ctx.sendToDst(Array((ctx.srcId.toLong,(ctx.srcAttr._1,ctx.srcAttr._2) ))),_ ++ _).collect.foreach(v => {println(s"id: ${v._1}"); for(arr<- v._2){ println(s"    ${arr._1} (name: ${arr._2._1}  age: ${arr._2._2})") }})
+  graph.aggregateMessages[Array[(VertexId, (String, Int))]](ctx => ctx.sendToDst(Array((ctx.srcId.toLong, (ctx.srcAttr._1, ctx.srcAttr._2)))), _ ++ _).collect.foreach(v => {
+    println(s"id: ${v._1}");
+    for (arr <- v._2) {
+      println(s"    ${arr._1} (name: ${arr._2._1}  age: ${arr._2._2})")
+    }
+  })
 
   println("聚合操作")
   println("**********************************************************")
@@ -165,7 +179,7 @@ object Practice extends App{
       case None => s"${user.name} does not have any followers."
       case Some((name, age)) => s"${name} is the oldest follower of ${user.name}."
     }
-  }.collect.foreach { case (id, str) => println(str)}
+  }.collect.foreach { case (id, str) => println(str) }
   println
 
   //***************************  实用操作    ****************************************
@@ -176,16 +190,16 @@ object Practice extends App{
   val initialGraph = graph.mapVertices((id, _) => if (id == sourceId) 0.0 else Double.PositiveInfinity)
   initialGraph.triplets.collect().foreach(println)
   println("找出5到各顶点的最短：")
-  val sssp = initialGraph.pregel(Double.PositiveInfinity,1)(
+  val sssp = initialGraph.pregel(Double.PositiveInfinity, 1)(
     (id, dist, newDist) => math.min(dist, newDist),
-    triplet => {  // 计算权重
+    triplet => { // 计算权重
       if (triplet.srcAttr + triplet.attr < triplet.dstAttr) {
         Iterator((triplet.dstId, triplet.srcAttr + triplet.attr))
       } else {
         Iterator.empty
       }
     },
-    (a,b) => math.min(a,b) // 当前节点所有输入的最短距离
+    (a, b) => math.min(a, b) // 当前节点所有输入的最短距离
   )
   sssp.triplets.collect().foreach(println)
 

@@ -7,7 +7,7 @@ import org.apache.spark.streaming.{Durations, StreamingContext}
 import org.apache.spark.util.LongAccumulator
 
 /**
-  * 在Sparkstreaming中使用累加器
+  * 在SparkStreaming中使用累加器
   *
   * 1.利用累加器统计自从SparkStreaming启动以来所有单词个数
   * 2.利用累加器统计每批次 “zhangsan” 个数

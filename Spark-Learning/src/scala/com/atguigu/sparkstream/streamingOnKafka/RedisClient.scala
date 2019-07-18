@@ -1,10 +1,10 @@
 package com.atguigu.sparkstream.streamingOnKafka
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig
-import redis.clients.jedis.JedisPool
+import redis.clients.jedis.{Jedis, JedisPool, JedisPoolConfig}
 
 object RedisClient {
-  val redisHost = "mynode4"
+  val redisHost = "node04"
   val redisPort = 6379
   val redisTimeout = 30000
   /**
@@ -12,25 +12,22 @@ object RedisClient {
     */
   lazy val pool = new JedisPool(new GenericObjectPoolConfig(), redisHost, redisPort, redisTimeout)
 
+  /**
+    * Jedis连接池
+    *
+    * @return
+  def getConnection(): Jedis = {
+    //new 一个JedisPoolConfig，用来设定参数
+    val conf = new JedisPoolConfig()
+    val pool = new JedisPool(conf, "node04", 6379)
+    //最大连接数
+    conf.setMaxTotal(20)
+    //最大空闲数
+    conf.setMaxIdle(20)
 
-//  def getOffSetFromRedis(db:Int,topic:String)  ={
-//    val jedis = RedisClient.pool.getResource
-//    jedis.select(db)
-//    val result: util.Map[String, String] = jedis.hgetAll(topic)
-//    RedisClient.pool.returnResource(jedis)
-//    if(result.size()==0){
-//      result.put("0","0")
-//      result.put("1","0")
-//      result.put("2","0")
-//    }
-//
-//    import scala.collection.JavaConversions.mapAsScalaMap
-//    val offsetMap: scala.collection.mutable.Map[String, String] = result
-//    offsetMap
-//  }
-
-//  def main(args: Array[String]): Unit = {
-//    val stringToString: mutable.Map[String, String] = getOffSetFromRedis(3,"mytest")
-//    println(stringToString)
-//  }
+    val jedis = pool.getResource()
+    // 密码
+    //jedis.auth("test123")
+    jedis
+  } */
 }

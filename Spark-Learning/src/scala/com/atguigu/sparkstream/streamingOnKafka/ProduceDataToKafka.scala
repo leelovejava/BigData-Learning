@@ -13,19 +13,19 @@ import scala.util.Random
 object ProduceDataToKafka {
   def main(args: Array[String]): Unit = {
     val props = new Properties()
-    props.put("bootstrap.servers", "mynode1:9092,mynode2:9092,mynode3:9092")
+    props.put("bootstrap.servers", "node01:9092,node02:9092,node03:9092")
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
-    val producer = new KafkaProducer[String,String](props)
+    val producer = new KafkaProducer[String, String](props)
     var counter = 0
     var keyFlag = 0
-    while(true){
-      counter +=1
-      keyFlag +=1
-      val content: String = userlogs()
+    while (true) {
+      counter += 1
+      keyFlag += 1
+      val content: String = userLogs()
       producer.send(new ProducerRecord[String, String]("m1", s"key-$keyFlag", content))
-      if(0 == counter%100){
+      if (0 == counter % 100) {
         counter = 0
         Thread.sleep(5000)
       }
@@ -34,24 +34,28 @@ object ProduceDataToKafka {
     producer.close()
   }
 
-  def userlogs()={
+  /**
+    * 用户日志
+    * @return
+    */
+  def userLogs() = {
     val userLogBuffer = new StringBuffer("")
     val timestamp = new Date().getTime();
     var userID = 0L
     var pageID = 0L
 
-    //随机生成的用户ID
+    // 随机生成的用户ID
     userID = Random.nextInt(2000)
 
-    //随机生成的页面ID
-    pageID =  Random.nextInt(2000);
+    // 随机生成的页面ID
+    pageID = Random.nextInt(2000);
 
-    //随机生成Channel
-    val channelNames = Array[String]("Spark","Scala","Kafka","Flink","Hadoop","Storm","Hive","Impala","HBase","ML")
+    // 随机生成Channel
+    val channelNames = Array[String]("Spark", "Scala", "Kafka", "Flink", "Hadoop", "Storm", "Hive", "Impala", "HBase", "ML")
     val channel = channelNames(Random.nextInt(10))
 
     val actionNames = Array[String]("View", "Register")
-    //随机生成action行为
+    // 随机生成action行为
     val action = actionNames(Random.nextInt(2))
 
     val dateToday = new SimpleDateFormat("yyyy-MM-dd").format(new Date())
