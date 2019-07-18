@@ -23,32 +23,34 @@ object ManageOffsetUseRedis {
     conf.setMaster("local")
     conf.setAppName("manageoffsetuseredis")
     //设置每个分区每秒读取多少条数据
-    conf.set("spark.streaming.kafka.maxRatePerPartition","10")
-    val ssc = new StreamingContext(conf,Durations.seconds(5))
+    conf.set("spark.streaming.kafka.maxRatePerPartition", "10")
+    val ssc = new StreamingContext(conf, Durations.seconds(5))
     //设置日志级别
     ssc.sparkContext.setLogLevel("Error")
 
     val topic = "m1"
     /**
-      * 从Redis 中获取消费者offset
+      * 从Redis 中获取消费者offsetKafkaUtils
       */
     val dbIndex = 3
-    val currentTopicOffset: mutable.Map[String, String] = getOffSetFromRedis(dbIndex,topic)
+    val currentTopicOffset: mutable.Map[String, String] = getOffSetFromRedis(dbIndex, topic)
     //初始读取到的topic offset:
-    currentTopicOffset.foreach(tp=>{println(s" 初始读取到的offset: $tp")})
+    currentTopicOffset.foreach(tp => {
+      println(s" 初始读取到的offset: $tp")
+    })
 
-    //转换成需要的类型
+    // 转换成需要的类型
     val fromOffsets: Predef.Map[TopicPartition, Long] = currentTopicOffset.map { resultSet =>
       new TopicPartition(topic, resultSet._1.toInt) -> resultSet._2.toLong
     }.toMap
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "mynode1:9092,mynode2:9092,mynode3:9092",
+      "bootstrap.servers" -> "node01:9092,node02:9092,node03:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "MyGroupId02",
       "auto.offset.reset" -> "latest",
-      "enable.auto.commit" -> (false: java.lang.Boolean)//默认是true
+      "enable.auto.commit" -> (false: java.lang.Boolean) //默认是true
     )
 
     /**
@@ -60,7 +62,7 @@ object ManageOffsetUseRedis {
       ConsumerStrategies.Assign[String, String](fromOffsets.keys.toList, kafkaParams, fromOffsets)
     )
 
-    stream.foreachRDD { (rdd:RDD[ConsumerRecord[String, String]]) =>
+    stream.foreachRDD { (rdd: RDD[ConsumerRecord[String, String]]) =>
 
       println("**** 业务处理完成  ****")
 
@@ -72,7 +74,7 @@ object ManageOffsetUseRedis {
       }
 
       //将当前批次最后的所有分区offsets 保存到 Redis中
-      saveOffsetToRedis(dbIndex,offsetRanges)
+      saveOffsetToRedis(dbIndex, offsetRanges)
 
     }
 
@@ -87,11 +89,11 @@ object ManageOffsetUseRedis {
     * 将消费者offset 保存到 Redis中
     *
     */
-  def saveOffsetToRedis(db:Int,offsetRanges:Array[OffsetRange]) = {
+  def saveOffsetToRedis(db: Int, offsetRanges: Array[OffsetRange]) = {
     val jedis = RedisClient.pool.getResource
     jedis.select(db)
-    offsetRanges.foreach(one=>{
-      jedis.hset(one.topic, one.partition.toString,one.untilOffset.toString)
+    offsetRanges.foreach(one => {
+      jedis.hset(one.topic, one.partition.toString, one.untilOffset.toString)
     })
     println("保存成功")
     RedisClient.pool.returnResource(jedis)
@@ -100,19 +102,20 @@ object ManageOffsetUseRedis {
 
   /**
     * 从Redis中获取保存的消费者offset
+    *
     * @param db
     * @param topic
     * @return
     */
-  def getOffSetFromRedis(db:Int,topic:String)  ={
+  def getOffSetFromRedis(db: Int, topic: String) = {
     val jedis = RedisClient.pool.getResource
     jedis.select(db)
     val result: util.Map[String, String] = jedis.hgetAll(topic)
     RedisClient.pool.returnResource(jedis)
-    if(result.size()==0){
-      result.put("0","0")
-      result.put("1","0")
-      result.put("2","0")
+    if (result.size() == 0) {
+      result.put("0", "0")
+      result.put("1", "0")
+      result.put("2", "0")
     }
     import scala.collection.JavaConversions.mapAsScalaMap
     val offsetMap: scala.collection.mutable.Map[String, String] = result
