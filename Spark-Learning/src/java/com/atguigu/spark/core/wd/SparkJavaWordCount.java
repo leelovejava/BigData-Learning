@@ -1,4 +1,4 @@
-package com.atguigu.sparkcore.wc;
+package com.atguigu.spark.core.wd;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
