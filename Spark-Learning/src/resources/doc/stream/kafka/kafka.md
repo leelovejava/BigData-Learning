@@ -1,5 +1,11 @@
 # kafka+sparkStreaming
 
+## 组合
+Spark 1.6 + kafka 0.8.2
+Spark 2.3 + kafka 0.11
+
+
+
 ## 概念
     
     kafka 是分布式消息系统，默认消息是存储磁盘，默认保存7天。
@@ -27,6 +33,7 @@
         kafka 0.8 之后，consumer的offset是通过kafka 集群来维护的
     
     zookeeper
+        负责协调broker
         存储原数据，broker，topic,partition..
         kafka 0.8之前还可以存储消费者offset
 
