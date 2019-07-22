@@ -14,7 +14,11 @@ Spark 2.3 + kafka 0.11
         消息生产者，两种机制，1.轮询，2.key的hash 。如果key 是null ,就是轮询，如果key 非null，按照key 的hash
     
     broker
-        组成kafka集群的节点，broker之间没有主从关系，依赖zookeeper协调。broker负责消息的读写和存储。每个broker可以管理多个partition
+        组成kafka集群的节点，broker之间没有主从关系，依赖zookeeper协调。
+        
+        broker负责消息的读写和存储。
+        
+        每个broker可以管理多个partition.一个partition只能由一个broker管理
     
     topic 
         一类消息/消息队列。
@@ -53,3 +57,19 @@ Spark 2.3 + kafka 0.11
  | Offset Commit API          | No                                                           | Yes                                                          |
  | Dynamic Topic Subscription | No                                                           | Yes                                                          |
  
+Kafka集群的搭建
+
+Kafka操作命令
+    创建topic
+        ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --create --topic t0721 --partitions 3 --replication-factor 3
+    查看集群topic
+        ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --list
+    控制台当做kafka topic生产者
+        ./kafka-console-producer.sh --broker-list mynode1:9092,mynode2:9092,mynode3:9092 --topic t0721
+    控制台当做kafka topic消费者
+        ./kafka-console-consumer.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181  --topic t0721
+    查看topic详细描述信息
+        ./kafka-topics.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --describe  --topic t0721
+    删除topic
+
+Kafka 的Leader均衡机制
