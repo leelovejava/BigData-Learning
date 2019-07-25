@@ -23,6 +23,7 @@ public class KafkaDataToRedis {
         Collection<String> topics = Arrays.asList("topicA");
 
         Map<String, Object> kafkaParams = new HashMap<>();
+        // 老版本: metadata.broker.list
         kafkaParams.put("bootstrap.servers", "node01:9092,node02:9092,node03:9092");
         kafkaParams.put("key.deserializer", StringDeserializer.class);
         kafkaParams.put("value.deserializer", StringDeserializer.class);

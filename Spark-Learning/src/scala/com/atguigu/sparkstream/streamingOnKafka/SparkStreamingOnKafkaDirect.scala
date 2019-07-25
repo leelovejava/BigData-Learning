@@ -21,8 +21,8 @@ import org.apache.spark.streaming.{Durations, StreamingContext}
   * 这个时间位于配置 group.min.session.timeout.ms【6s】 和 group.max.session.timeout.ms【300s】之间的一个参数,
   * 如果SparkSteaming 批次间隔时间大于5分钟，也就是大于300s,那么就要相应的调大group.max.session.timeout.ms 这个值。
   *
-  *  4.大多数情况下，SparkStreaming读取数据使用 LocationStrategies.PreferConsistent 这种策略，这种策略会将分区均匀的分布在集群的Executor之间。
-  * 如果Executor在kafka 集群中的某些节点上，可以使用 LocationStrategies.PreferBrokers 这种策略，那么当前这个Executor 中的数据会来自当前broker节点。
+  *  4.大多数情况下，SparkStreaming读取数据使用 LocationStrategies.PreferConsistent 这种策略，这种策略会将分区均匀的分布在集群的Executor之间。(不容易导致数据倾斜)
+  * 如果Executor在kafka 集群中的某些节点上，可以使用 LocationStrategies.PreferBrokers 这种策略，那么当前这个Executor 中的数据会来自当前broker节点。(避免节点之间数据传输)
   * 如果节点之间的分区有明显的分布不均，可以使用 LocationStrategies.PreferFixed 这种策略,可以通过一个map 指定将topic分区分布在哪些节点中。
   *
   *  5.新的消费者api 可以将kafka 中的消息预读取到缓存区中，默认大小为64k。默认缓存区在 Executor 中，加快处理数据速度。
@@ -53,10 +53,11 @@ object SparkStreamingOnKafkaDirect {
     //    ssc.sparkContext.setLogLevel("ERROR")
 
     val kafkaParams = Map[String, Object](
-      "bootstrap.servers" -> "mynode1:9092,mynode2:9092,mynode3:9092",
+      "bootstrap.servers" -> "node01:9092,node02:9092,node03:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
-      "group.id" -> "MyGroupIdxxx1", //
+      "group.id" -> "MyGroupId",
+
       /**
         *
         * earliest ：当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始
@@ -71,20 +72,21 @@ object SparkStreamingOnKafkaDirect {
       "enable.auto.commit" -> (false: java.lang.Boolean) //默认是true
     )
 
-    val topics = Array[String]("t0629")
+    val topics = Array[String]("test")
     val stream: InputDStream[ConsumerRecord[String, String]] = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent, //消费策略
       Subscribe[String, String](topics, kafkaParams)
     )
 
-    val transStrem: DStream[String] = stream.map((record: ConsumerRecord[String, String]) => {
+    val transStream: DStream[String] = stream.map((record: ConsumerRecord[String, String]) => {
+      // tuple
       val key_value = (record.key, record.value)
       println("receive message key = " + key_value._1)
       println("receive message value = " + key_value._2)
       key_value._2
     })
-    val wordsDS: DStream[String] = transStrem.flatMap(line => {
+    val wordsDS: DStream[String] = transStream.flatMap(line => {
       line.split("\t")
     })
     val result: DStream[(String, Int)] = wordsDS.map((_, 1)).reduceByKey(_ + _)
@@ -98,7 +100,7 @@ object SparkStreamingOnKafkaDirect {
       val offsetRanges: Array[OffsetRange] = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
       // some time later, after outputs have completed
       for (or <- offsetRanges) {
-        println(s"current topic = ${or.topic},partition = ${or.partition},fromoffset = ${or.fromOffset},untiloffset=${or.untilOffset}")
+        println(s"current topic = ${or.topic},partition = ${or.partition},from offset = ${or.fromOffset},until offset=${or.untilOffset}")
       }
       stream.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
     }

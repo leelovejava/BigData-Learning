@@ -9,6 +9,8 @@ import scala.util.Random
 
 /**
   * 向 kafka 中生产数据
+  *
+  * @author tianhao
   */
 object ProduceDataToKafka {
   def main(args: Array[String]): Unit = {
@@ -17,6 +19,9 @@ object ProduceDataToKafka {
     props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer")
     props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer")
 
+    //val topic = Array[String]("test")
+    val topic = "test"
+
     val producer = new KafkaProducer[String, String](props)
     var counter = 0
     var keyFlag = 0
@@ -24,7 +29,7 @@ object ProduceDataToKafka {
       counter += 1
       keyFlag += 1
       val content: String = userLogs()
-      producer.send(new ProducerRecord[String, String]("m1", s"key-$keyFlag", content))
+      producer.send(new ProducerRecord[String, String](topic, s"key-$keyFlag", content))
       if (0 == counter % 100) {
         counter = 0
         Thread.sleep(5000)
@@ -36,6 +41,7 @@ object ProduceDataToKafka {
 
   /**
     * 用户日志
+    *
     * @return
     */
   def userLogs() = {
