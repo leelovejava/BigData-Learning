@@ -9,6 +9,10 @@ import scala.Tuple2;
 
 import java.util.Arrays;
 
+/**
+ * 左连接
+ * @author tianhao
+ */
 public class LeftOuterJoin {
     public static void main(String[] args) {
         SparkConf conf = new SparkConf();

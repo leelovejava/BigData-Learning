@@ -34,7 +34,7 @@ Spark 2.3 + kafka 0.11
         每个消费者组在消费同一个topic时，这个topic中数据只能被消费一次
         不同的消费者组消费同一个topic互不影响
         kafka 0.8 之前 consumer 自己在zookeeper中维护消费者offset
-        kafka 0.8 之后，consumer的offset是通过kafka 集群来维护的
+        kafka 0.8 之后，consumer的offset是通过kafka 集群来维护的(默认topic: __consomer_offsets)
     
     zookeeper
         负责协调broker
@@ -60,16 +60,21 @@ Spark 2.3 + kafka 0.11
 Kafka集群的搭建
 
 Kafka操作命令
-    创建topic
-        ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --create --topic t0721 --partitions 3 --replication-factor 3
-    查看集群topic
-        ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --list
-    控制台当做kafka topic生产者
-        ./kafka-console-producer.sh --broker-list mynode1:9092,mynode2:9092,mynode3:9092 --topic t0721
-    控制台当做kafka topic消费者
-        ./kafka-console-consumer.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181  --topic t0721
-    查看topic详细描述信息
-        ./kafka-topics.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --describe  --topic t0721
-    删除topic
+创建topic
+> ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --create --topic t0721 --partitions 3 --replication-factor 3
+
+查看集群topic
+> ./kafka-topics.sh  --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --list
+
+控制台当做kafka topic生产者
+>  ./kafka-console-producer.sh --broker-list mynode1:9092,mynode2:9092,mynode3:9092 --topic t0721
+
+控制台当做kafka topic消费者
+> ./kafka-console-consumer.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181  --topic t0721
+
+查看topic详细描述信息
+> ./kafka-topics.sh --zookeeper mynode3:2181,mynode4:2181,mynode5:2181 --describe  --topic t0721
+
+删除topic
 
 Kafka 的Leader均衡机制
