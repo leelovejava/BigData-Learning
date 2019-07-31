@@ -6,6 +6,8 @@ import org.apache.spark.streaming.dstream.DStream
 import org.apache.spark.streaming.{Durations, StreamingContext}
 
 /**
+  * transform
+  * @author leelovejava
   * @date 2019-07-16
   */
 object Transform {
@@ -16,7 +18,7 @@ object Transform {
     val ssc = new StreamingContext(conf,Durations.seconds(5))
     ssc.sparkContext.setLogLevel("Error")
 
-    val lines = ssc.socketTextStream("mynode5",9999)
+    val lines = ssc.socketTextStream("node05",9999)
 
     /**
       * transform

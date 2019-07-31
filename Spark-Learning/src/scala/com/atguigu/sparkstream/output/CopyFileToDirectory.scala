@@ -1,4 +1,4 @@
-package com.atguigu.sparkstream
+package com.atguigu.sparkstream.output
 
 import java.io.{File, FileInputStream, FileOutputStream}
 import java.util.UUID

@@ -1,4 +1,4 @@
-package com.atguigu.sparkstream
+package com.atguigu.sparkstream.transform
 
 import org.apache.spark.SparkConf
 import org.apache.spark.broadcast.Broadcast
@@ -6,6 +6,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.dstream.{DStream, ReceiverInputDStream}
 import org.apache.spark.streaming.{Durations, StreamingContext}
 
+/**
+  * transform广播黑名单
+ *
+  * @author leelovejava
+  */
 object TransformBlackList {
   def main(args: Array[String]): Unit = {
     val conf = new SparkConf()
