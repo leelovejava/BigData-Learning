@@ -27,7 +27,7 @@ class JDBCSink2(url: String, username: String, password: String) extends Foreach
 
       val insertSql = "insert into userCounts(uid) values('" + uid + "')"
 
-      //执行查询
+      // 执行查询
       var resultSet = statement.executeQuery(sql)
 
       if (resultSet.next()) {

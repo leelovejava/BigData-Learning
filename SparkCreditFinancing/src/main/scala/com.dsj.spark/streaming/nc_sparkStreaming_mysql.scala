@@ -38,10 +38,10 @@ object nc_sparkStreaming_mysql {
         val updateSql = "update appCounts set count = count+" + count + " where appname ='" + appname + "'"
 
         val insertSql = "insert into appCounts(appname,count) values('" + appname + "'," + count + ")"
-        //实例化statement对象
+        // 实例化statement对象
         statement = conn.createStatement()
 
-        //执行查询
+        // 执行查询
         var resultSet = statement.executeQuery(sql)
 
         if (resultSet.next()) {
@@ -130,14 +130,14 @@ object nc_sparkStreaming_mysql {
     // Create a socket stream on target ip:port and count the
     val lines = ssc.socketTextStream(args(0), args(1).toInt, StorageLevel.MEMORY_AND_DISK_SER)
 
-    //无效数据过滤
+    // 无效数据过滤
     val filter = lines.map(_.split(",")).filter(_.length == 4)
 
-    //统计app所有页面浏览量
+    // 统计app所有页面浏览量
     val appCounts = filter.map(x => (x(2), 1)).reduceByKey(_ + _)
     appCounts.foreachRDD(rdd => {
       print("--------------------------------------------")
-      //分区并行执行
+      // 分区并行执行
       rdd.foreachPartition(myFun)
     })
     appCounts.print()

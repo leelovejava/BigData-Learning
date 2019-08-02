@@ -16,7 +16,7 @@ object kafka_StructuredStreaming_mysql {
     val df = spark
       .readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", "cdh01:9092,cdh02:9092,cdh03:9092")
+      .option("kafka.bootstrap.servers", Constants.KAFKA_BROKER)
       .option("subscribe", "applogs")
       .load()
     val ds = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")

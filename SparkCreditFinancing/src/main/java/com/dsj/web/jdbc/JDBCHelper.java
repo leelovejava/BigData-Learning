@@ -9,90 +9,103 @@ import java.util.LinkedList;
 
 public class JDBCHelper {
 
-	//µÚÒ»²½£º¼ÓÔØÇý¶¯
-	static{
-		
-		 try {
-			 ConfigurationManager.getProperty(Constants.JDBC_DRIVER);
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	//µÚ¶þ²½£¬ÊµÏÖJDBCHelperµÄµ¥Àý»¯
-	private static JDBCHelper instance = null;
-	
-	public static JDBCHelper getInstance(){
-		if(instance == null){
-			synchronized (JDBCHelper.class){
-				if(instance == null){
-					instance = new JDBCHelper();
-				}
-			}
-		}
-		return instance;
-	}
-	
-	//µÚÈý²½£º´´½¨Êý¾Ý¿âÁ¬½Ó³Ø
-	private LinkedList<Connection> datasource = new LinkedList<Connection>();
-	
-    private JDBCHelper(){
-    	int size = ConfigurationManager.getInteger(Constants.JDBC_DATASOURCE_SIZE);
-    	for(int i = 0;i <size ;i++){
-    		String url = ConfigurationManager.getProperty(Constants.JDBC_URL);
-    		String user = ConfigurationManager.getProperty(Constants.JDBC_USER);
-    		String password = ConfigurationManager.getProperty(Constants.JDBC_PASSWORD);
-    		try {
-				Connection conn = DriverManager.getConnection(url, user, password);
-				datasource.push(conn);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    }
-    
-    //µÚËÄ²½£ºÌá¹©»ñÈ¡Êý¾Ý¿âÁ¬½Ó
-    public synchronized Connection getConnection(){
-    	while(datasource.size() == 0){
-    		try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    	return datasource.poll();
-    }
-	
-    //µÚÎå²½£ºÖ´ÐÐ²éÑ¯SQLÓï¾ä
-    public synchronized void executeQuery(String sql,Object[] params,QueryCallback callback) throws Exception{
-    	Connection conn = null;
-    	PreparedStatement pstmt = null;
-        ResultSet rs = null;        
+    /**
+     * ç¬¬ä¸€æ­¥ï¼šåŠ è½½é©±åŠ¨
+     */
+    static {
+
         try {
-        	conn = getConnection();
-        	pstmt = conn.prepareStatement(sql);
-			if(null !=params){
-				for(int i=0;i<params.length;i++){
-					pstmt.setObject(i+1, params[i]);
-				}
-			}
-			rs = pstmt.executeQuery();
-			callback.process(rs);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			if(conn !=null){
-				datasource.push(conn);
-			}
-		}
+            ConfigurationManager.getProperty(Constants.JDBC_DRIVER);
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
-    
-    public static interface QueryCallback{
-    	void process(ResultSet rs) throws Exception;
+
+    /**
+     * ç¬¬äºŒæ­¥ï¼Œå®žçŽ°JDBCHelperçš„å•ä¾‹åŒ–
+     */
+    private static JDBCHelper instance = null;
+
+    public static JDBCHelper getInstance() {
+        if (instance == null) {
+            synchronized (JDBCHelper.class) {
+                if (instance == null) {
+                    instance = new JDBCHelper();
+                }
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * ç¬¬ä¸‰æ­¥ï¼šåˆ›å»ºæ•°æ®åº“è¿žæŽ¥æ± 
+     */
+    private LinkedList<Connection> datasource = new LinkedList<Connection>();
+
+    private JDBCHelper() {
+        int size = ConfigurationManager.getInteger(Constants.JDBC_DATASOURCE_SIZE);
+        for (int i = 0; i < size; i++) {
+            String url = ConfigurationManager.getProperty(Constants.JDBC_URL);
+            String user = ConfigurationManager.getProperty(Constants.JDBC_USER);
+            String password = ConfigurationManager.getProperty(Constants.JDBC_PASSWORD);
+            try {
+                Connection conn = DriverManager.getConnection(url, user, password);
+                datasource.push(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * ç¬¬å››æ­¥ï¼šæä¾›èŽ·å–æ•°æ®åº“è¿žæŽ¥
+     *
+     * @return
+     */
+    public synchronized Connection getConnection() {
+        while (datasource.size() == 0) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return datasource.poll();
+    }
+
+    /**
+     * ç¬¬äº”æ­¥ï¼šæ‰§è¡ŒæŸ¥è¯¢SQLè¯­å¥
+     *
+     * @param sql
+     * @param params
+     * @param callback
+     * @throws Exception
+     */
+    public synchronized void executeQuery(String sql, Object[] params, QueryCallback callback) throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            if (null != params) {
+                for (int i = 0; i < params.length; i++) {
+                    pstmt.setObject(i + 1, params[i]);
+                }
+            }
+            rs = pstmt.executeQuery();
+            callback.process(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                datasource.push(conn);
+            }
+        }
+    }
+
+    public static interface QueryCallback {
+        void process(ResultSet rs) throws Exception;
     }
 }

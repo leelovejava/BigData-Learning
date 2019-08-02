@@ -5,4 +5,7 @@ object Constants {
   var userName: String = "root"
   var passWord: String = "root"
   var driver: String = "com.mysql.jdbc.Driver"
+
+
+  var KAFKA_BROKER = "cdh01:9092,cdh02:9092,cdh03:9092"
 }
