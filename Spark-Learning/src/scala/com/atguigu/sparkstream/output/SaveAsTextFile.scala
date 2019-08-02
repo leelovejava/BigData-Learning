@@ -1,4 +1,4 @@
-package com.atguigu.sparkstream
+package com.atguigu.sparkstream.output
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.dstream.DStream
@@ -21,18 +21,24 @@ object SaveAsTextFile {
     val conf = new SparkConf()
     conf.setMaster("local")
     conf.setAppName("saveAsTextFile")
-    val ssc = new StreamingContext(conf,Durations.seconds(5))
+    val ssc = new StreamingContext(conf, Durations.seconds(5))
     /**
       * SparkStreaming 监控一个目录数据时
       *   1.这个目录下已经存在的文件不会被监控到，可以监控增加的文件
       *   2.增加的文件必须是原子性产生。
       */
     val lines: DStream[String] = ssc.textFileStream("./data/streamingCopyFile")
-    val words: DStream[String] = lines.flatMap(line=>{line.split(" ")})
-    val pairWords: DStream[(String, Int)] = words.map(word=>{(word,1)})
-    val result: DStream[(String, Int)] = pairWords.reduceByKey((v1:Int, v2:Int)=>{v1+v2})
+    val words: DStream[String] = lines.flatMap(line => {
+      line.split(" ")
+    })
+    val pairWords: DStream[(String, Int)] = words.map(word => {
+      (word, 1)
+    })
+    val result: DStream[(String, Int)] = pairWords.reduceByKey((v1: Int, v2: Int) => {
+      v1 + v2
+    })
     //保存的多级目录就直接写在前缀中
-    result.saveAsTextFiles("./data/streamingSavePath/spark/prefix","suffix")
+    result.saveAsTextFiles("./data/streamingSavePath/spark/prefix", "suffix")
     ssc.start()
     ssc.awaitTermination()
     ssc.stop()

@@ -5,11 +5,13 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 
 /**
-  * Created by wuyufei on 06/09/2017.
+  * @author wuyufei
+  * @date 2017-06-09
   */
 object WorldCount {
   /**
     * bin/spark-submit --class com.atguigu.sparkstream.WorldCount /home/hadoop/data/networdcount-jar-with-dependencies.jar
+    *
     * @param args
     */
   def main(args: Array[String]) {
@@ -31,7 +33,7 @@ object WorldCount {
     // Print the first ten elements of each RDD generated in this DStream to the console
     wordCounts.print()
 
-    ssc.start()             // Start the computation
-    ssc.awaitTermination()  // Wait for the computation to terminate
+    ssc.start() // Start the computation
+    ssc.awaitTermination() // Wait for the computation to terminate
   }
 }

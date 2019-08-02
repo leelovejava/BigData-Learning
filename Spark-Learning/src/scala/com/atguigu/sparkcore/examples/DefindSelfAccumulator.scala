@@ -16,6 +16,7 @@ class SelfAccumlator extends AccumulatorV2 [Info,Info]{
 
   /**
     * 初始化累计器的值,这个值是最后要在merge合并的时候累加到最终结果内
+    * driver端
     */
   private var result: Info = new Info(0,0)
 //  println(s" in first result = $result  end。")

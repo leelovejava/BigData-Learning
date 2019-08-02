@@ -118,9 +118,10 @@ Kafka
  重启每台节点生效
             
 ### Kafka 的Leader均衡机制
-     当集群中broker节点有挂掉时，Kafka会自动为当前挂掉的broker节点管理的partition按照副本优先的规则寻找新的leader
-     当挂掉的broker重新启动之后，kafka集群会自动将当前节点管理的paritition重新管理，将partition做一次均衡
-       周期：leader.imbalance.check.interval.seconds   300s
+ 当集群中broker节点有挂掉时，Kafka会自动为当前挂掉的broker节点管理的partition按照副本优先的规则寻找新的leader
+     
+  当挂掉的broker重新启动之后，kafka集群会自动将当前节点管理的paritition重新管理，将partition做一次均衡
+     周期：leader.imbalance.check.interval.seconds   300s
 
 ### SparkStreaming + Kafka
 
