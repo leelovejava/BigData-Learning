@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>newsWeb</display-name>
+  <welcome-file-list>
+    <welcome-file>jsp/news.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>TestServlet</servlet-name>
+    <servlet-class>com.dsj.web.servlet.TestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TestServlet</servlet-name>
+    <url-pattern>/TestServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>NewsSvlt</servlet-name>
+    <servlet-class>com.dsj.web.servlet.NewsSvlt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NewsSvlt</servlet-name>
+    <url-pattern>/NewsSvlt</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CreditSvlt</servlet-name>
+    <servlet-class>com.dsj.web.servlet.CreditSvlt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreditSvlt</servlet-name>
+    <url-pattern>/CreditSvlt</url-pattern>
+  </servlet-mapping>
+  
+    <servlet>
+    <servlet-name>AppSvlt</servlet-name>
+    <servlet-class>com.dsj.web.servlet.AppSvlt</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AppSvlt</servlet-name>
+    <url-pattern>/AppSvlt</url-pattern>
+  </servlet-mapping>
+</web-app>
