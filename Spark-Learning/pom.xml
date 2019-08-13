@@ -24,6 +24,8 @@
         <mongodb-spark.version>2.0.0</mongodb-spark.version>
         <casbah.version>3.1.1</casbah.version>
         <jedis.verson>2.9.0</jedis.verson>
+        <!--扩展了Java标准集合框架-->
+        <fastutil.version>8.3.0</fastutil.version>
     </properties>
 
     <repositories>
@@ -202,13 +204,21 @@
         </dependency>
         <!-- Logging End -->
 
+        <!--json-->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
-        
+
+        <!--扩展了Java标准集合框架-->
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>${fastutil.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
