@@ -1,0 +1,10 @@
+phonenum [11111] has been sent to partition 2
+phonenum [11111] has been sent to partition 2
+phonenum [17600000009] has been sent to partition 0
+phonenum [17600000011] has been sent to partition 0
+phonenum [13700000003] has been sent to partition 1
+phonenum [10000] has been sent to partition 2
+phonenum [10000] has been sent to partition 2
+phonenum [15500000008] has been sent to partition 1
+phonenum [10000] has been sent to partition 2
+phonenum [17600000009] has been sent to partition 0
