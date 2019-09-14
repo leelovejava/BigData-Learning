@@ -1,4 +1,4 @@
-package com.leelovejava.hbase;
+package com.atlxl.weibo;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -10,7 +10,9 @@ import org.apache.hadoop.hbase.client.Table;
 import java.io.IOException;
 
 /**
- * Created by jixin on 18-2-25.
+ * hbase工具类
+ *
+ * @author leelovejava
  */
 public class HBaseConn {
 
@@ -22,12 +24,7 @@ public class HBaseConn {
         try {
             if (configuration == null) {
                 configuration = HBaseConfiguration.create();
-                configuration.set("hbase.zookeeper.quorum", "node01:2181,node02:2181,node03:2181");
-                //configuration.set("HADOOP_HOME", "C:/Program Files (x86)/hadoop");
-                // HBase RegionServer绑定的端口
-                //configuration.set("hbase.regionserver.port","192.168.109.131:16020");
-                // HBase的Master的端口,默认60000
-                //configuration.set("hbase.master.port","192.168.109.131:60000");
+                configuration.set("hbase.zookeeper.quorum", Constant.HBASE_ZOOKEEPER_QUORUM);
             }
         } catch (Exception e) {
             e.printStackTrace();

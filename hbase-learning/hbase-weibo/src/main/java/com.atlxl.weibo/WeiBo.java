@@ -1,38 +1,44 @@
-package com.leelovejava.hbase.wb;
+package com.atlxl.weibo;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import com.leelovejava.hbase.HBaseConn;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.MasterNotRunningException;
-import org.apache.hadoop.hbase.NamespaceDescriptor;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.ZooKeeperConnectionException;
+import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
- * 案例: 微博
+ * 微博
+ *
+ * @author leeloejava
  */
 public class WeiBo {
 
-    //微博内容表的表名
-    private static final byte[] TABLE_CONTENT = Bytes.toBytes("weibo:content");
-    //用户关系表的表名
-    private static final byte[] TABLE_RELATIONS = Bytes.toBytes("weibo:relations");
-    //微博收件箱表的表名
-    private static final byte[] TABLE_RECEIVE_CONTENT_EMAIL = Bytes.toBytes("weibo:receive_content_email");
+    /**
+     * 需求
+     * 1) 微博内容的浏览，数据库表设计
+     * 2) 用户社交体现：关注用户，取关用户
+     * 3) 拉取关注的人的微博内容
+     * <p>
+     * 设计
+     * 1) 创建命名空间以及表名的定义
+     * 2) 创建微博内容表
+     * 3) 创建用户关系表
+     * 4) 创建用户微博内容接收邮件表
+     * 5) 发布微博内容
+     * 6) 添加关注用户
+     * 7) 移除（取关）用户
+     * 8) 获取关注的人的微博内容
+     * 9) 测试
+     *
+     * @throws IOException
+     */
+
 
     public void initTable() {
         initNamespace();
@@ -85,7 +91,7 @@ public class WeiBo {
         try {
             admin = (HBaseAdmin) HBaseConn.getHBaseConn().getAdmin();
             //创建表表述
-            HTableDescriptor content = new HTableDescriptor(TableName.valueOf(TABLE_CONTENT));
+            HTableDescriptor content = new HTableDescriptor(TableName.valueOf(Constant.TABLE_CONTENT));
             //创建列族描述
             HColumnDescriptor info = new HColumnDescriptor(Bytes.toBytes("info"));
             //设置块缓存
@@ -131,21 +137,21 @@ public class WeiBo {
         HBaseAdmin admin = null;
         try {
             admin = (HBaseAdmin) HBaseConn.getHBaseConn().getAdmin();
-            HTableDescriptor relations = new HTableDescriptor(TableName.valueOf(TABLE_RELATIONS));
+            HTableDescriptor relations = new HTableDescriptor(TableName.valueOf(Constant.TABLE_RELATIONS));
 
-            //关注的人的列族
+            // 关注的人的列族
             HColumnDescriptor attends = new HColumnDescriptor(Bytes.toBytes("attends"));
-            //设置块缓存
+            // 设置块缓存
             attends.setBlockCacheEnabled(true);
-            //设置块缓存大小
+            // 设置块缓存大小
             attends.setBlocksize(2097152);
-            //设置压缩方式
-//			info.setCompressionType(Algorithm.SNAPPY);
-            //设置版本确界
+            // 设置压缩方式
+            // info.setCompressionType(Algorithm.SNAPPY);
+            // 设置版本确界
             attends.setMaxVersions(1);
             attends.setMinVersions(1);
 
-            //粉丝列族
+            // 粉丝列族
             HColumnDescriptor fans = new HColumnDescriptor(Bytes.toBytes("fans"));
             fans.setBlockCacheEnabled(true);
             fans.setBlocksize(2097152);
@@ -188,7 +194,7 @@ public class WeiBo {
         try {
             admin = (HBaseAdmin) HBaseConn.getHBaseConn().getAdmin();
 
-            HTableDescriptor receive_content_email = new HTableDescriptor(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+            HTableDescriptor receive_content_email = new HTableDescriptor(TableName.valueOf(Constant.TABLE_RECEIVE_CONTENT_EMAIL));
             HColumnDescriptor info = new HColumnDescriptor(Bytes.toBytes("info"));
 
             info.setBlockCacheEnabled(true);
@@ -226,7 +232,7 @@ public class WeiBo {
         try {
             connection = HBaseConn.getHBaseConn();
             //a、微博内容表中添加1条数据，首先获取微博内容表描述
-            Table contentTBL = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+            Table contentTBL = connection.getTable(TableName.valueOf(Constant.TABLE_CONTENT));
             //组装Rowkey
             long timestamp = System.currentTimeMillis();
             String rowKey = uid + "_" + timestamp;
@@ -238,7 +244,7 @@ public class WeiBo {
 
             //b、向微博收件箱表中加入发布的Rowkey
             //b.1、查询用户关系表，得到当前用户有哪些粉丝
-            Table relationsTBL = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+            Table relationsTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RELATIONS));
             //b.2、取出目标数据
             Get get = new Get(Bytes.toBytes(uid));
             get.addFamily(Bytes.toBytes("fans"));
@@ -251,13 +257,15 @@ public class WeiBo {
                 fans.add(CellUtil.cloneQualifier(cell));
             }
             //如果该用户没有粉丝，则直接return
-            if (fans.size() <= 0) return;
-            //开始操作收件箱表
-            Table recTBL = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+            if (fans.size() <= 0) {
+                return;
+            }
+            // 开始操作收件箱表
+            Table recTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RECEIVE_CONTENT_EMAIL));
             List<Put> puts = new ArrayList<Put>();
             for (byte[] fan : fans) {
                 Put fanPut = new Put(fan);
-                fanPut.add(Bytes.toBytes("info"), Bytes.toBytes(uid), timestamp, Bytes.toBytes(rowKey));
+                fanPut.addColumn(Bytes.toBytes("info"), Bytes.toBytes(uid), timestamp, Bytes.toBytes(rowKey));
                 puts.add(fanPut);
             }
             recTBL.put(puts);
@@ -281,7 +289,7 @@ public class WeiBo {
      * c、当前操作用户的微博收件箱添加所关注的用户发布的微博rowkey
      */
     public void addAttends(String uid, String... attends) {
-        //参数过滤
+        // 参数过滤
         if (attends == null || attends.length <= 0 || uid == null || uid.length() <= 0) {
             return;
         }
@@ -291,7 +299,7 @@ public class WeiBo {
         try {
             connection = HBaseConn.getHBaseConn();
             //用户关系表操作对象（连接到用户关系表）
-            Table relationsTBL = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+            Table relationsTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RELATIONS));
             List<Put> puts = new ArrayList<Put>();
             //a、在微博用户关系表中，添加新关注的好友
             Put attendPut = new Put(Bytes.toBytes(uid));
@@ -308,7 +316,7 @@ public class WeiBo {
             relationsTBL.put(puts);
 
             //c.1、微博收件箱添加关注的用户发布的微博内容（content）的rowkey
-            Table contentTBL = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+            Table contentTBL = connection.getTable(TableName.valueOf(Constant.TABLE_CONTENT));
             Scan scan = new Scan();
             //用于存放取出来的关注的人所发布的微博的rowkey
             List<byte[]> rowkeys = new ArrayList<byte[]>();
@@ -334,9 +342,11 @@ public class WeiBo {
             }
 
             //c.2、将取出的微博rowkey放置于当前操作用户的收件箱中
-            if (rowkeys.size() <= 0) return;
+            if (rowkeys.size() <= 0) {
+                return;
+            }
             //得到微博收件箱表的操作对象
-            Table recTBL = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+            Table recTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RECEIVE_CONTENT_EMAIL));
             //用于存放多个关注的用户的发布的多条微博rowkey信息
             List<Put> recPuts = new ArrayList<Put>();
             for (byte[] rk : rowkeys) {
@@ -346,7 +356,7 @@ public class WeiBo {
                 //借取uid
                 String attendUID = rowKey.substring(0, rowKey.indexOf("_"));
                 long timestamp = Long.parseLong(rowKey.substring(rowKey.indexOf("_") + 1));
-                //将微博rowkey添加到指定单元格中
+                // 将微博rowkey添加到指定单元格中
                 put.add(Bytes.toBytes("info"), Bytes.toBytes(attendUID), timestamp, rk);
                 recPuts.add(put);
             }
@@ -374,13 +384,15 @@ public class WeiBo {
      */
     public void removeAttends(String uid, String... attends) {
         //过滤数据
-        if (uid == null || uid.length() <= 0 || attends == null || attends.length <= 0) return;
+        if (uid == null || uid.length() <= 0 || attends == null || attends.length <= 0) {
+            return;
+        }
         Connection connection;
 
         try {
             connection = HBaseConn.getHBaseConn();
             //a、在微博用户关系表中，删除已关注的好友
-            Table relationsTBL = connection.getTable(TableName.valueOf(TABLE_RELATIONS));
+            Table relationsTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RELATIONS));
 
             //待删除的用户关系表中的所有数据
             List<Delete> deletes = new ArrayList<Delete>();
@@ -403,7 +415,7 @@ public class WeiBo {
             relationsTBL.delete(deletes);
 
             //c、删除取关的人的微博rowkey 从 收件箱表中
-            Table recTBL = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+            Table recTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RECEIVE_CONTENT_EMAIL));
 
             Delete recDelete = new Delete(Bytes.toBytes(uid));
             for (String attend : attends) {
@@ -426,7 +438,7 @@ public class WeiBo {
         Connection connection = null;
         try {
             connection = HBaseConn.getHBaseConn();
-            Table recTBL = connection.getTable(TableName.valueOf(TABLE_RECEIVE_CONTENT_EMAIL));
+            Table recTBL = connection.getTable(TableName.valueOf(Constant.TABLE_RECEIVE_CONTENT_EMAIL));
             //a、从收件箱中取得微博rowKey
             Get get = new Get(Bytes.toBytes(uid));
             //设置最大版本号
@@ -437,7 +449,7 @@ public class WeiBo {
                 rowkeys.add(CellUtil.cloneValue(cell));
             }
             //b、根据取出的所有rowkey去微博内容表中检索数据
-            Table contentTBL = connection.getTable(TableName.valueOf(TABLE_CONTENT));
+            Table contentTBL = connection.getTable(TableName.valueOf(Constant.TABLE_CONTENT));
             List<Get> gets = new ArrayList<Get>();
             //根据rowkey取出对应微博的具体内容
             for (byte[] rk : rowkeys) {
@@ -478,45 +490,4 @@ public class WeiBo {
 
         return null;
     }
-
-    /**
-     * 发布微博内容
-     * 添加关注
-     * 取消关注
-     * 展示内容
-     */
-
-    public void testPublishContent(WeiBo wb) {
-        wb.publishContent("0001", "今天买了一包空气，送了点薯片，非常开心！！");
-        wb.publishContent("0001", "今天天气不错。");
-    }
-
-    public void testAddAttend(WeiBo wb) {
-        wb.publishContent("0008", "准备下课！");
-        wb.publishContent("0009", "准备关机！");
-        wb.addAttends("0001", "0008", "0009");
-    }
-
-    public void testRemoveAttend(WeiBo wb) {
-        wb.removeAttends("0001", "0008");
-    }
-
-    public void testShowMessage(WeiBo wb) {
-        List<Message> messages = wb.getAttendsContent("0001");
-        for (Message message : messages) {
-            System.out.println(message);
-        }
-    }
-
-    public static void main(String[] args) {
-        WeiBo weibo = new WeiBo();
-        weibo.initTable();
-
-        weibo.testPublishContent(weibo);
-        weibo.testAddAttend(weibo);
-        weibo.testShowMessage(weibo);
-        weibo.testRemoveAttend(weibo);
-        weibo.testShowMessage(weibo);
-    }
-
 }

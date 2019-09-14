@@ -1,5 +1,10 @@
-package com.leelovejava.hbase.wb;
+package com.atlxl.weibo;
 
+/**
+ * 微博消息类
+ *
+ * @author leelovejava
+ */
 public class Message {
     private String uid;
     private String timestamp;

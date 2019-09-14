@@ -1,12 +1,12 @@
 package com.leelovejava.hbase.wc;
 
-import java.io.IOException;
-
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
 import org.apache.hadoop.hbase.mapreduce.TableReducer;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+
+import java.io.IOException;
 
 public class WCReducer extends TableReducer<Text, IntWritable, ImmutableBytesWritable> {
 
@@ -19,7 +19,7 @@ public class WCReducer extends TableReducer<Text, IntWritable, ImmutableBytesWri
 			sum += it.get();
 		}
 		Put put = new Put(text.toString().getBytes());
-		put.add("cf".getBytes(), "ct".getBytes(), (sum + "").getBytes());
+		put.addColumn("cf".getBytes(), "ct".getBytes(), (sum + "").getBytes());
 		context.write(null, put);
 
 	}
