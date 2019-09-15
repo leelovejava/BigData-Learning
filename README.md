@@ -1,18 +1,29 @@
-# 大数据学习案例
+# 大数据学习源码
 
 ## 目录
-boot-scala           scala和spring整合
 
-Zk                   zookeeper
+`Flume-Leaning`           flume
 
-Spring-Hadoop         spring官方整合hadoop
+`hbase-leaning`           hbase
 
-hdfs-demo             hdfs操作
+`hdfs-demo`               hdfs操作
 
-hbase-demo            hbase操作
+`kafka-learning`          kafka
 
-hive-demo             hive操作
+`Scala-Learning`          Scala
 
-hbase-phoenix-mybatis phoenix和mybatis整合
+`Spark-16-Learning`       Spark1.6(java)
 
-Spark-Learning        Spark操作
+`Spark-24-Learning`       Spark2.4新特性
+
+`Spark-Learning`          Spark2.3(java&scala)
+
+`SparkCreditFinancing`    Spark金融信贷项目
+
+`Spring-Hadoop`           Spring和hadoop整合
+
+`Storm-Learning`          Storm
+
+`userdraw`                用户画像项目
+
+`Zookeeper-Learning`      Zookeeper基本操作&分布式锁
