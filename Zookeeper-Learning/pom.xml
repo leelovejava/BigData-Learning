@@ -16,7 +16,9 @@
         <!--单元测试-->
         <junit.verson>4.12</junit.verson>
         <!--日志-->
-        <slf4j-version>1.7.25</slf4j-version>
+        <slf4j.version>1.7.21</slf4j.version>
+        <curator.framework.verion>4.0.1</curator.framework.verion>
+        <curator.recipes.verion>4.0.1</curator.recipes.verion>
     </properties>
 
     <dependencies>
@@ -32,6 +34,26 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!--zookeeper客户端curator end-->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-framework</artifactId>
+            <version>${curator.framework.verion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>${curator.recipes.verion}</version>
+        </dependency>
+        <!--zookeeper客户端curator end-->
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
