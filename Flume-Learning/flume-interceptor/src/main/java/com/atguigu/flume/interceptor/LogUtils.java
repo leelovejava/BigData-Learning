@@ -2,6 +2,11 @@ package com.atguigu.flume.interceptor;
 
 import org.apache.commons.lang.math.NumberUtils;
 
+/**
+ * 日志工具类
+ *
+ * @author leelovejava
+ */
 public class LogUtils {
 
     public static boolean validateStart(String log) {
@@ -18,6 +23,12 @@ public class LogUtils {
         return true;
     }
 
+    /**
+     * 验证日志
+     *
+     * @param log
+     * @return
+     */
     public static boolean validateEvent(String log) {
         // 服务器时间 | json
         // 1549696569054 | {"cm":{"ln":"-89.2","sv":"V2.0.4","os":"8.2.0","g":"M67B4QYU@gmail.com","nw":"4G","l":"en","vc":"18","hw":"1080*1920","ar":"MX","uid":"u8678","t":"1549679122062","la":"-27.4","md":"sumsung-12","vn":"1.1.3","ba":"Sumsung","sr":"Y"},"ap":"weather","et":[]}

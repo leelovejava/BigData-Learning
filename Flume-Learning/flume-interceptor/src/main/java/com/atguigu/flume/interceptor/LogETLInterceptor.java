@@ -26,8 +26,9 @@ public class LogETLInterceptor implements Interceptor {
         byte [] body = event.getBody();
         String log = new String(body, Charset.forName("UTF-8"));
 
-        // 校验
+        // 校验 启动日志(json) 事件日志(服务器时间json)
         if (log.contains("start")) {
+            // 校验启动日志
             if (LogUtils.validateStart(log)) {
                 return event;
             }
