@@ -13,7 +13,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * 模拟产生数据
  *
- * @author tianhao
+ * @author leelovejava
  */
 public class AnalogData {
 

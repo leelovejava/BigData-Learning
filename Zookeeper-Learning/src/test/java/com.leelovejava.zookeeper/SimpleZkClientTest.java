@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * zkClient
  *
- * @author tianhao
+ * @author leelovejava
  */
 public class SimpleZkClientTest {
     /**

@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 /**
  * 左连接
- * @author tianhao
+ * @author leelovejava
  */
 public class LeftOuterJoin {
     public static void main(String[] args) {

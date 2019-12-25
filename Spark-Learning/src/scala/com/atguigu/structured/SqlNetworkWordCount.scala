@@ -5,7 +5,7 @@ import org.apache.spark.sql.SparkSession
 /**
   * 结构化流的worldCount
   *
-  * @author tianhao
+  * @author leelovejava
   * @date 2019-01-05
   */
 object SqlNetworkWordCount {

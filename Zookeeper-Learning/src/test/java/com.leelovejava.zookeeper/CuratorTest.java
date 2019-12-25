@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 /**
  * zookeeper客户端 curator使用
  *
- * @author tianhao
+ * @author leelovejava
  */
 public class CuratorTest {
 

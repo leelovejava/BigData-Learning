@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * @program: hadoop-train
  * @description: 使用Spring Hadoop来访问HDFS文件系统
- * @author: tianhao
+ * @author: leelovejava
  * @create: 2018-04-04 17:39
  **/
 public class SpringHadoopApp {

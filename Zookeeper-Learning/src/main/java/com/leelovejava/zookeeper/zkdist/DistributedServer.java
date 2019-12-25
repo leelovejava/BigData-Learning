@@ -7,7 +7,7 @@ import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooKeeper;
 
 /**
- * @author tianhao
+ * @author leelovejava
  */
 public class DistributedServer {
     private static final String connectString = "192.168.9.232:2181";

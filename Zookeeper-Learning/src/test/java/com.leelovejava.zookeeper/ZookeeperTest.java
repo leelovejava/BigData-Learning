@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * zookeeper测试
- * @author tianhao
+ * @author leelovejava
  */
 public class ZookeeperTest {
 

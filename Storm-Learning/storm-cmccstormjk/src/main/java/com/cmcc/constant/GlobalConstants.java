@@ -2,7 +2,7 @@ package com.cmcc.constant;
 
 /**
  * 定义
- * @author tianhao
+ * @author leelovejava
  */
 public class GlobalConstants {
 	/**

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * java版的广播变量
  *
- * @author tianhao
+ * @author leelovejava
  */
 public class BroadCastTest {
     public static void main(String[] args) {

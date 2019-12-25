@@ -6,6 +6,9 @@ import com.leelovejava.zookeeper.remoting.common.HelloService;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
  
+/**
+ * @author leelovejava
+ */
 public class HelloServiceImpl extends UnicastRemoteObject implements HelloService {
  
     protected HelloServiceImpl() throws RemoteException {

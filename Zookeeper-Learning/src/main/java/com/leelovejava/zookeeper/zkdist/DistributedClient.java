@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author tianhao
+ * @author leelovejava
  */
 public class DistributedClient {
 

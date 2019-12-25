@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  *
- * @author tianhao
+ * @author leelovejava
  */
 @SpringBootApplication
 public class BootScalaApplication {

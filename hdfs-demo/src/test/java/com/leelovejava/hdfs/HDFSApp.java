@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 
 /**
  * hdfs测试
- * @author tianhao
+ * @author leelovejava
  * @date 2018-09-12 09:44
  */
 public class HDFSApp {

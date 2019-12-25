@@ -9,7 +9,7 @@ import java.util.Random;
 /**
  * 随机生成中文姓名，性别，Email，手机号，住址
  *
- * @author tianhao
+ * @author leelovejava
  */
 public class RandomValueUtil {
     public static String base = "abcdefghijklmnopqrstuvwxyz0123456789";

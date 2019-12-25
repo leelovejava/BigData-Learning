@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author tianhao
+ * @author leelovejava
  */
 @RestController
 @RequestMapping("/meta/database")

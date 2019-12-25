@@ -10,7 +10,7 @@ import org.apache.spark.streaming.{Durations, StreamingContext}
 /**
   * SparkStreaming使用FileDStream监控目录
   *
-  * @author tianhao
+  * @author leelovejava
   */
 object SparkStreamingMonitorDirectoryWithFileDStream {
   def main(args: Array[String]): Unit = {

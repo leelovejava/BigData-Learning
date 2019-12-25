@@ -8,7 +8,7 @@ package com.leelovejava.demo.excep;
  * 不管有没有异常捕获，都会执行finally, 因此通常可以在finally代码块中释放资源
  * 可以有多个catch，分别捕获对应的异常，这时需要把范围小的异常类写在前面，把范围大的异常类写在后面，否则编译错误。会提示 "Exception 'java.lang.xxxxxx' has already been caught"
  *
- * @author tianhao
+ * @author leelovejava
  * @date 2019/6/10
  */
 public class JavaException {

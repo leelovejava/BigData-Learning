@@ -10,7 +10,7 @@ import scala.util.Random
 /**
   * 向 kafka 中生产数据
   *
-  * @author tianhao
+  * @author leelovejava
   */
 object ProduceDataToKafka {
   def main(args: Array[String]): Unit = {

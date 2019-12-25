@@ -18,7 +18,7 @@ import org.apache.hadoop.io.Text;
  *     SELECT add_example(scores.math, scores.art) FROM scores;
  *     SELECT add_example(6, 7, 8, 6.8) FROM scores;
  * e）销毁临时函数：hive> DROP TEMPORARY FUNCTION add_example;
- * @author tianhao
+ * @author leelovejava
  */
 public class TuoMin extends UDF {
 
