@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <hadoop.version>2.5.0.RELEASE</hadoop.version>
         <hadoop.client.version>2.9.1</hadoop.client.version>
-        <zookeeper.version>3.4.6</zookeeper.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
         <!--单元测试-->
         <junit.verson>4.12</junit.verson>
         <!--日志-->
