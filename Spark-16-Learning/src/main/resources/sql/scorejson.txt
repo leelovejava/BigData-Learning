@@ -1,3 +1,0 @@
-{"name":"zhangsan","score":99}
-{"name":"lisi","score":100}
-{"name":"wangwu","score":101}

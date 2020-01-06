@@ -1,3 +1,0 @@
-package com.leelovejava.demo.ch08.sec02
-
-// ...

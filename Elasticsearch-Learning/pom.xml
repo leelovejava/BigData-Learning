@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>es-senior</module>
+        <module>es-high-level-client</module>
     </modules>
 
     <build>

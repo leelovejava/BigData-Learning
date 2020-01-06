@@ -14,5 +14,5 @@ public class EsConstant {
     /**
      * elasticsearch地址
      */
-    public static final String ES_ADDRESS = EsConstant.ES_ADDRESS;
+    public static final String ES_ADDRESS = "localhost";
 }
