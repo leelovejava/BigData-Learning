@@ -16,7 +16,7 @@
         <!--日志-->
         <slf4j-version>1.7.25</slf4j-version>
         <flume-version>1.9.0</flume-version>
-        <mysql-version>8.0.15</mysql-version>
+        <mysql-version>8.0.16</mysql-version>
     </properties>
 
     <dependencies>
