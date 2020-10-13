@@ -14,7 +14,7 @@
         <hadoop.client.version>2.9.1</hadoop.client.version>
         <zookeeper.version>3.4.6</zookeeper.version>
         <!--单元测试-->
-        <junit.verson>4.12</junit.verson>
+        <junit.verson>4.13.1</junit.verson>
         <!--日志-->
         <slf4j.version>1.7.21</slf4j.version>
         <curator.framework.verion>4.0.1</curator.framework.verion>
